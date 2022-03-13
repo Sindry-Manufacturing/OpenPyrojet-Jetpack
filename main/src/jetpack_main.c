@@ -17,7 +17,7 @@ void jetpack_init() {
 
 void jetpack_fire(uint8 nozzleId) {
     int maxId = jetpackSpecifications.nozzleCount - 1;
-    if (nozzleId < maxId) {
+    if (nozzleId > 0 && nozzleId < maxId) {
         ESP_LOGI(TAG, "Firing nozzle %d", nozzleId);
         // TODO: implement
     }
