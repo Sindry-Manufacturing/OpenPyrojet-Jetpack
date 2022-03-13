@@ -1,4 +1,6 @@
-# OpenPyrojet
+# OpenPyrojet Jetpack
+
+This is the print head firmware project, designed for ESP32.
 
 ## Hardware Required
 
