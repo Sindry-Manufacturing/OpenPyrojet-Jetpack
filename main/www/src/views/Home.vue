@@ -13,7 +13,7 @@
               <span class="grey--text">Trigger delay: {{triggerDelay}} ms</span>
             </div>
           </v-card-title>
-          <v-btn fab dark large color="red accent-4" @click="fire">
+          <v-btn fab large @click="fire">
             <v-icon dark>sensors</v-icon>
           </v-btn>
         </v-card>

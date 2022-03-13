@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app dark id="inspire">
     <v-navigation-drawer v-model="drawer" fixed app clipped>
       <v-list dense>
         <v-list-tile to="/">
@@ -20,7 +20,7 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar color="red accent-4" dark fixed app clipped-left>
+    <v-toolbar fixed app clipped-left>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>OpenPyrojet Control</v-toolbar-title>
     </v-toolbar>
@@ -29,19 +29,19 @@
         <router-view></router-view>
       </v-container>
     </v-content>
-    <v-footer color="red accent-4" app fixed>
-      <span class="white--text">&copy; OpenPyrojet</span>
+    <v-footer app fixed>
+      <span>&copy; OpenPyrojet</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
 export default {
-  name: "App",
-  data() {
+  name: 'App',
+  data () {
     return {
       drawer: null
-    };
+    }
   }
-};
+}
 </script>
