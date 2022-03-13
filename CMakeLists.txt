@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.15)
+
+set(EXTRA_COMPONENT_DIRS $ENV{IDF_PATH}/examples/common_components/protocol_examples_common)
+
+include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+
+if (IDF_TARGET)
+    add_definitions(-DIDF_TARGET)
+endif()
+
+project(OpenPyrojet)
+
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMAKE")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+

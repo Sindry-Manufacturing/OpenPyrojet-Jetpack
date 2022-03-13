@@ -1,0 +1,13 @@
+.idea/
+.DS_Store
+bin/
+
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+*.cmake
+Makefile
+*.cbp
+
+sdkconfig
+build/
