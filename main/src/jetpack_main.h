@@ -3,9 +3,12 @@
 
 #include "types.h"
 
+#define NOZZLE_COUNT_MAX 16
+
 // Constants
 typedef struct {
     uint8 nozzleCount;
+    uint8 nozzlePins[NOZZLE_COUNT_MAX];
 } JetpackSpecifications;
 
 // Changeable settings
