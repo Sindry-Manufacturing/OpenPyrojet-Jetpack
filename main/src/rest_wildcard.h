@@ -1,3 +1,6 @@
+/**
+ * REST URI handlers for catch-all file serving (static files in ESP32 partition)
+ */
 #ifndef OPENPYROJET_REST_WILDCARD_H
 #define OPENPYROJET_REST_WILDCARD_H
 

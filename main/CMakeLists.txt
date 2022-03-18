@@ -2,6 +2,7 @@ idf_component_register(SRCS "src/main.c"
     "src/rest_base.c"
     "src/rest_server.c"
     "src/rest_wildcard.c"
+    "src/rest_system_info.c"
     "src/jetpack_main.c"
     "src/jetpack_rest.c"
     INCLUDE_DIRS ".")

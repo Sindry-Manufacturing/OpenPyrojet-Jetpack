@@ -1,3 +1,6 @@
+/**
+ * Shared code for all REST API implementations.
+ */
 #ifndef OPENPYROJET_REST_BASE_H
 #define OPENPYROJET_REST_BASE_H
 

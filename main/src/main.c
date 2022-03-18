@@ -14,7 +14,7 @@
 #include "jetpack_main.h"
 #include "rest_server.h"
 
-#define MDNS_INSTANCE "esp home web server"
+#define MDNS_INSTANCE "Jetpack Server"
 #define CONFIG_EXAMPLE_MDNS_HOST_NAME "pyrojet"
 #define CONFIG_EXAMPLE_WEB_MOUNT_POINT "/www"
 
