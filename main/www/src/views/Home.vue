@@ -6,8 +6,6 @@
           <v-img :src="require('../assets/logo.png')" contain height="60"></v-img>
           <v-card-title primary-title>
             <div class="ma-auto">
-              <span class="grey--text">Nozzle count: {{nozzleCount}}</span>
-              <br>
               <span class="grey--text">Heating duration: {{heatingDuration}} ms</span>
               <br>
               <span class="grey--text">Trigger delay: {{triggerDelay}} ms</span>
@@ -33,9 +31,8 @@ export default {
   },
   mounted () {
     this.$ajax
-      .get('/api/v1/jetpack/info')
+      .get('/api/v1/jetpack/config')
       .then(data => {
-        this.nozzleCount = data.data.nozzleCount
         this.heatingDuration = data.data.heatingDuration
         this.triggerDelay = data.data.triggerDelay
       })
