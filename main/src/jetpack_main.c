@@ -42,10 +42,9 @@ void jetpack_fire(uint8 nozzleId) {
     int maxId = config.nozzleCount - 1;
     if (nozzleId < maxId) {
         uint8 nozzlePin = config.nozzlePins[nozzleId];
-        uint32 micros = config.heatingDuration * 1000L;
-        ESP_LOGI(TAG, "Firing nozzle %d at pin %d for %d us", nozzleId, nozzlePin, micros);
+        ESP_LOGI(TAG, "Firing nozzle %d at pin %d for %d µs", nozzleId, nozzlePin, config.heatingDuration);
         gpio_set_level(nozzlePin, 1);
-        usleep(micros);
+        usleep(config.heatingDuration);
         gpio_set_level(nozzlePin, 0);
     }
 }

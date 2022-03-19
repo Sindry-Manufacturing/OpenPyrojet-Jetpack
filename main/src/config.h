@@ -11,8 +11,8 @@
 typedef struct {
     uint8 nozzleCount;
     uint8 nozzlePins[NOZZLE_COUNT_MAX];
-    uint8 heatingDuration; // duration of filament heating in ms
-    uint16 triggerDelay; // minimum delay between consecutive ejections in ms
+    uint32 heatingDuration; // duration of filament heating in ms
+    uint32 triggerDelay; // minimum delay between consecutive ejections in ms
 } Config;
 
 extern Config config;

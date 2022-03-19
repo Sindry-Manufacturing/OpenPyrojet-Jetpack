@@ -6,9 +6,9 @@
           <v-img :src="require('../assets/logo.png')" contain height="60"></v-img>
           <v-card-title primary-title>
             <div class="ma-auto">
-              <span class="grey--text">Heating duration: {{heatingDuration}} ms</span>
+              <span class="grey--text">Heating duration: {{heatingDuration}} µs</span>
               <br>
-              <span class="grey--text">Trigger delay: {{triggerDelay}} ms</span>
+              <span class="grey--text">Trigger delay: {{triggerDelay}} µs</span>
             </div>
           </v-card-title>
           <v-btn fab large @click="fire">
