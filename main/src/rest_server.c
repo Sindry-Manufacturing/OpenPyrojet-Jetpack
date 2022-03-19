@@ -19,13 +19,14 @@ esp_err_t rest_server_start(const char* basePath)
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
     config.uri_match_fn = httpd_uri_match_wildcard;
 
-    ESP_LOGI(REST_TAG, "Starting HTTP Server");
+    ESP_LOGI(REST_TAG, "starting");
     REST_CHECK(httpd_start(&server, &config) == ESP_OK, "Start server failed", err_start);
 
     system_info_register_uri_handler(server, rest_context);
     jetpack_register_uri_handler(server, rest_context);
     register_wildcard_uri_handler(server, rest_context);
 
+    ESP_LOGI(REST_TAG, "ready");
     return ESP_OK;
 err_start:
     free(rest_context);
