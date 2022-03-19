@@ -22,7 +22,7 @@
     </v-navigation-drawer>
     <v-toolbar fixed app clipped-left>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>OpenPyrojet Control</v-toolbar-title>
+      <v-toolbar-title>OpenPyrojet Jetpack</v-toolbar-title>
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
