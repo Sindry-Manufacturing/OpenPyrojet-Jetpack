@@ -1,0 +1,5 @@
+{
+    "nozzlePins": [18, 19],
+    "heatingDuration": 100,
+    "triggerDelay": 50
+}
