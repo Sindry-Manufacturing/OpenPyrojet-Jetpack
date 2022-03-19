@@ -23,6 +23,7 @@ static esp_err_t jetpack_config_get_handler(httpd_req_t *req) {
     cJSON* root = cJSON_CreateObject();
     cJSON_AddNumberToObject(root, "heatingDuration", config.heatingDuration);
     cJSON_AddNumberToObject(root, "triggerDelay", config.triggerDelay);
+    cJSON_AddNumberToObject(root, "nozzleCount", config.nozzleCount);
     const char* sys_info = cJSON_Print(root);
     httpd_resp_sendstr(req, sys_info);
     free((void*)sys_info);

@@ -40,11 +40,13 @@ esp_err_t jetpack_init() {
 
 void jetpack_fire(uint8 nozzleId) {
     int maxId = config.nozzleCount - 1;
-    if (nozzleId < maxId) {
+    if (nozzleId <= maxId) {
         uint8 nozzlePin = config.nozzlePins[nozzleId];
         ESP_LOGI(TAG, "Firing nozzle %d at pin %d for %d µs", nozzleId, nozzlePin, config.heatingDuration);
         gpio_set_level(nozzlePin, 1);
         usleep(config.heatingDuration);
         gpio_set_level(nozzlePin, 0);
+    }  else {
+        ESP_LOGE(TAG, "Invalid nozzle index: %d (max %d)", nozzleId, maxId);
     }
 }
