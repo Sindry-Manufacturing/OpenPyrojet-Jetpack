@@ -1,4 +1,8 @@
 {
+    "wifi" : {
+        "ssid" : "",
+        "password" : ""
+    },
     "nozzlePins": [18, 19],
     "heatingDuration": 100000,
     "triggerDelay": 50000

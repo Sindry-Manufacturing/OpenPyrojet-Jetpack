@@ -29,8 +29,40 @@ esp_err_t config_read_nozzle_pins(Config* config, const cJSON* jsonArray) {
     return ESP_OK;
 }
 
+esp_err_t config_wifi_get(const cJSON* root, WifiConfig* wifiConfig) {
+    wifiConfig->ssid[0] = 0;
+    wifiConfig->password[0] = 0;
+
+    const cJSON* wifiJson = cJSON_GetObjectItemCaseSensitive(root, "wifi");
+    if (cJSON_IsNull(wifiJson)) {
+        ESP_LOGE(CONFIG_TAG, "wifi config not found");
+        return ESP_FAIL;
+    }
+    const cJSON* ssidJson = cJSON_GetObjectItemCaseSensitive(wifiJson, "ssid");
+    if (cJSON_IsNull(ssidJson) || !cJSON_IsString(ssidJson)) {
+        ESP_LOGE(CONFIG_TAG, "wifi ssid is not a string");
+        return ESP_FAIL;
+    }
+
+    const cJSON* passwordJson = cJSON_GetObjectItemCaseSensitive(wifiJson, "password");
+    if (cJSON_IsNull(passwordJson) || !cJSON_IsString(passwordJson)) {
+        ESP_LOGE(CONFIG_TAG, "wifi password is not a string");
+        return ESP_FAIL;
+    }
+
+    const char* ssid = cJSON_GetStringValue(ssidJson);
+    const char* password = cJSON_GetStringValue(passwordJson);
+
+    strcpy(wifiConfig->ssid, ssid);
+    strcpy(wifiConfig->password, password);
+
+    return ESP_OK;
+}
+
 esp_err_t config_from_json(Config* config, const char* jsonBuffer) {
     cJSON* root = cJSON_Parse(jsonBuffer);
+
+    config_wifi_get(root, &(config->wifi));
 
     config->heatingDuration = cJSON_GetObjectItemCaseSensitive(root, "heatingDuration")->valueint;
     ESP_LOGI(CONFIG_TAG, "heatingDuration = %d µs", config->heatingDuration);
