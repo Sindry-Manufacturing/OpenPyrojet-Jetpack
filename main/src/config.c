@@ -3,10 +3,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include "cJSON.h"
 
 const char* CONFIG_TAG = "config";
 Config config;
+
+const char* userConfigPath = "/config/user.json";
+const char* defaultConfigPath = "/config/default.json";
+
+static bool config_file_exists(const char* filename) {
+    struct stat buffer;
+    return (stat(filename, &buffer) == 0);
+}
 
 esp_err_t config_read_nozzle_pins(Config* config, const cJSON* jsonArray) {
     if (!cJSON_IsArray(jsonArray)) {
@@ -16,7 +25,8 @@ esp_err_t config_read_nozzle_pins(Config* config, const cJSON* jsonArray) {
     config->nozzleCount = cJSON_GetArraySize(jsonArray);
     int nozzleIndex = 0;
     cJSON* jsonPin = NULL;
-    cJSON_ArrayForEach(jsonPin, jsonArray) {
+    cJSON_ArrayForEach(jsonPin, jsonArray)
+    {
         int pinNumber = jsonPin->valueint;
         config->nozzlePins[nozzleIndex] = pinNumber;
         ESP_LOGI(CONFIG_TAG, "nozzle %d: pin %d", nozzleIndex, pinNumber);
@@ -80,16 +90,56 @@ esp_err_t config_from_json(Config* config, const char* jsonBuffer) {
     return ESP_OK;
 }
 
+bool config_ensure_user_copy() {
+    if (config_file_exists(userConfigPath)) { // file exists
+        ESP_LOGI(CONFIG_TAG, "using existing %s", userConfigPath);
+        return true;
+    }
+
+    if (config_file_exists(defaultConfigPath)) { // file exists
+        ESP_LOGI(CONFIG_TAG, "%s exists", defaultConfigPath);
+    } else {
+        ESP_LOGI(CONFIG_TAG, "%s not found", defaultConfigPath);
+    }
+
+    FILE* sourceFile = fopen(defaultConfigPath, "r");
+    if (sourceFile == NULL) {
+        ESP_LOGE(CONFIG_TAG, "failed to open target file %s", defaultConfigPath);
+        return false;
+    }
+
+    FILE* targetFile = fopen(userConfigPath, "w");
+    if (targetFile == NULL) {
+        ESP_LOGE(CONFIG_TAG, "failed to open target file %s", userConfigPath);
+        fclose(sourceFile);
+        return false;
+    }
+
+    int character;
+    while ((character = fgetc(sourceFile)) != EOF) {
+        fputc(character, targetFile);
+    }
+
+    ESP_LOGI(CONFIG_TAG, "copied %s into %s", defaultConfigPath, userConfigPath);
+
+    fclose(sourceFile);
+    fclose(targetFile);
+
+    return true;
+}
+
 esp_err_t config_init() {
-    const char* filePath = "/config/default.json";
-    FILE* file = fopen(filePath, "r");
+    config_ensure_user_copy();
+
+    const char* userConfigPath = "/config/user.json";
+    FILE* file = fopen(userConfigPath, "r");
     if (file == NULL) {
-        ESP_LOGE(CONFIG_TAG, "failed to open file %s", filePath);
-        return ESP_FAIL;
+        ESP_LOGE(CONFIG_TAG, "failed to open file %s", userConfigPath);
+        return false;
     }
 
     // Verify file size
-    fseek(file, 0 , SEEK_END);
+    fseek(file, 0, SEEK_END);
     long fileSize = ftell(file);
     if (fileSize > CONFIG_FILE_SIZE_MAX) {
         ESP_LOGE(CONFIG_TAG, "file too large: %ld bytes", fileSize);

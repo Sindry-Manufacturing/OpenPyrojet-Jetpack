@@ -11,3 +11,5 @@ Makefile
 
 sdkconfig
 build/
+
+main/config/user.json

@@ -1,7 +1,7 @@
 {
     "wifi" : {
-        "ssid" : "",
-        "password" : ""
+        "ssid" : "placeholder",
+        "password" : "placeholder"
     },
     "nozzlePins": [18, 19],
     "heatingDuration": 100000,
