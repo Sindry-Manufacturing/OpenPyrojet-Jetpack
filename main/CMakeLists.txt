@@ -1,5 +1,6 @@
 idf_component_register(SRCS "src/main.c"
     "src/config.c"
+    "src/file.c"
     "src/wifi_connect.c"
     "src/fs_init.c"
     "src/rest_base.c"

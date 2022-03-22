@@ -1,9 +1,9 @@
 {
-    "wifi" : {
-        "ssid" : "placeholder",
-        "password" : "placeholder"
-    },
-    "nozzlePins": [18, 19],
-    "heatingDuration": 100000,
-    "triggerDelay": 50000
+  "wifi" : {
+    "ssid" : "placeholder",
+    "password" : "placeholder"
+  },
+  "nozzlePins": [18, 19],
+  "heatingDuration": 100000,
+  "triggerDelay": 50000
 }
