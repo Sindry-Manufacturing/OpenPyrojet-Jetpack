@@ -28,12 +28,12 @@ void jetpack_init_gpio(Config* config) {
 }
 
 esp_err_t jetpack_init() {
-    if (config_init() != ESP_OK) {
+    if (!config_init()) {
         ESP_LOGE(TAG, "config_init() failed");
         return ESP_FAIL;
     }
 
-   jetpack_init_gpio(&config);
+    jetpack_init_gpio(&config);
 
     return ESP_OK;
 }

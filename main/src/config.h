@@ -22,4 +22,4 @@ extern Config config;
 // Needs to have have exactly NOZZLE_COUNT_MAX entries (see jetpack_main.h)
 #endif //OPENPYROJET_CONFIG_H
 
-esp_err_t config_init();
+bool config_init();

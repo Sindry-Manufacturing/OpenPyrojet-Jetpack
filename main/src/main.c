@@ -15,6 +15,8 @@
 #include "jetpack_main.h"
 #include "rest_server.h"
 #include "fs_init.h"
+#include "message_json.h"
+#include "config_json.h"
 
 /*
  * Structure holding server handle and internal socket fd in order to use out of request send
@@ -78,14 +80,41 @@ static esp_err_t websocket_handler(httpd_req_t* request) {
         return ret;
     }
     ESP_LOGI(TAG, "Received[%d]: %s", frame.type, frame.payload);
-    if (frame.type == HTTPD_WS_TYPE_TEXT &&
-        strcmp((char*) frame.payload, "Trigger async") == 0) {
-        return trigger_async_send(request->handle, request);
-    }
 
-    ret = httpd_ws_send_frame(request, &frame);
-    if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "httpd_ws_send_frame failed with %d", ret);
+    if (frame.type == HTTPD_WS_TYPE_TEXT) {
+        Message message;
+        cJSON* messageJson = message_from_json(&message, (const char*)frame.payload);
+        if (messageJson == NULL) {
+            ESP_LOGW(TAG, "no message found");
+        }
+        if (messageJson != NULL) {
+            ESP_LOGI(TAG, "received Message with type %d", message.type);
+            cJSON* json;
+            switch (message.type) {
+                case GET_CONFIG:
+                    json = config_to_json(&config);
+                    httpd_ws_frame_t jsonFrame;
+                    char* jsonText = cJSON_PrintUnformatted(json);
+                    jsonFrame.payload = (uint8_t*)jsonText;
+                    jsonFrame.type = HTTPD_WS_TYPE_TEXT;
+                    jsonFrame.len = strlen((const char*)jsonText);
+                    ret = httpd_ws_send_frame(request, &jsonFrame);
+                    if (ret != ESP_OK) {
+                        ESP_LOGE(TAG, "sending response failed (%d)", ret);
+                    }
+                    cJSON_Delete(json);
+                    break;
+                case PUT_CONFIG:
+                    break;
+                case FIRE_NOZZLE:
+                    break;
+                default:
+                    break;
+            }
+            cJSON_Delete(messageJson);
+        }
+    } else {
+        ESP_LOGI(TAG, "received other");
     }
     return ret;
 }

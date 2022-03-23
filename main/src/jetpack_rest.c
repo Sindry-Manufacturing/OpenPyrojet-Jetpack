@@ -2,29 +2,23 @@
 #include "jetpack_main.h"
 #include "cJSON.h"
 #include "esp_log.h"
-#include "config.h"
+#include "config_json.h"
 
 static esp_err_t jetpack_config_put_handler(httpd_req_t* request) {
     char* buffer = rest_read_buffer(request);
     if (buffer == NULL) {
         return ESP_FAIL;
     }
-    cJSON* root = cJSON_Parse(buffer);
-    config.heatingDuration = cJSON_GetObjectItem(root, "heatingDuration")->valueint;
-    config.triggerDelay = cJSON_GetObjectItem(root, "triggerDelay")->valueint;
-    ESP_LOGI(REST_TAG, "heatingDuration = %d, triggerDelay = %d", config.heatingDuration, config.triggerDelay);
-    cJSON_Delete(root);
+
+    config_from_json(&config, buffer);
     httpd_resp_sendstr(request, "");
     return ESP_OK;
 }
 
 static esp_err_t jetpack_config_get_handler(httpd_req_t *req) {
-    httpd_resp_set_type(req, "application/json");
-    cJSON* root = cJSON_CreateObject();
-    cJSON_AddNumberToObject(root, "heatingDuration", config.heatingDuration);
-    cJSON_AddNumberToObject(root, "triggerDelay", config.triggerDelay);
-    cJSON_AddNumberToObject(root, "nozzleCount", config.nozzleCount);
+    cJSON* root = config_to_json(&config);
     const char* sys_info = cJSON_Print(root);
+    httpd_resp_set_type(req, "application/json");
     httpd_resp_sendstr(req, sys_info);
     free((void*)sys_info);
     cJSON_Delete(root);
