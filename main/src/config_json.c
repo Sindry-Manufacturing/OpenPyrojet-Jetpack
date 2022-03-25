@@ -51,12 +51,26 @@ bool config_from_json(Config* config, const char* jsonBuffer) {
     return true;
 }
 
-
 cJSON* config_to_json(const Config* config) {
     cJSON* root = cJSON_CreateObject();
     cJSON_AddNumberToObject(root, "heatingDuration", config->heatingDuration);
     cJSON_AddNumberToObject(root, "triggerDelay", config->triggerDelay);
-    cJSON_AddNumberToObject(root, "nozzleCount", config->nozzleCount);
+
+    // Collect the nozzle pins as an int[]
+    int pinInts[NOZZLE_COUNT_MAX];
+    int currentIndex = 0;
+    while (currentIndex < NOZZLE_COUNT_MAX) {
+        uint8 pin = config->nozzlePins[currentIndex];
+        if (pin > 0) {
+            pinInts[currentIndex] = (int) pin;
+            currentIndex++;
+        } else {
+            break;
+        }
+    }
+
+    cJSON* nozzlePins = cJSON_CreateIntArray(pinInts, currentIndex);
+    cJSON_AddItemToObject(root, "nozzlePins", nozzlePins);
 
     cJSON* wifi = cJSON_AddObjectToObject(root, "wifi");
     wifi_config_to_json(wifi, &config->wifi);

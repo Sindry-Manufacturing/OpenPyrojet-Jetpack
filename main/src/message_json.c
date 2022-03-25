@@ -2,34 +2,34 @@
 #include <stdlib.h>
 #include <string.h>
 
-static int message_type_from_string(const char* text) {
-    if (strcmp(text, "GET_CONFIG") == 0) {
-        return GET_CONFIG;
-    } else if (strcmp(text, "PUT_CONFIG") == 0) {
-        return PUT_CONFIG;
-    } else if (strcmp(text, "FIRE_NOZZLE") == 0) {
-        return FIRE_NOZZLE;
-    } else {
-        return UNKNOWN;
-    }
-}
-
 /**
- * @param message
- * @param text
- * @return the root json, which MUST be freed after Message is processed
+ * Reads a message from JSON.
+ * Returns the cJSON object so it can be used to continue parsing the Message data.
+ *
+ * @param message target
+ * @param jsonText to parse
+ * @return the root json, which MUST be freed by the caller after Message is processed
  */
-cJSON* message_from_json(Message* message, const char* text) {
-    cJSON* root = cJSON_Parse(text);
+cJSON* message_from_json(Message* message, const char* jsonText) {
+    cJSON* root = cJSON_Parse(jsonText);
 
     cJSON* typeJson = cJSON_GetObjectItemCaseSensitive(root, "type");
     if (cJSON_IsString(typeJson)) {
-        message->type = message_type_from_string(typeJson->valuestring);
+        if (strlen(typeJson->valuestring) < sizeof(message->type)) {
+            strcpy(message->type, typeJson->valuestring);
+        }
     } else {
-        message->type = UNKNOWN;
+        strcpy(message->type, "unknown");
     }
 
     message->data = cJSON_GetObjectItem(root, "data");
 
+    return root;
+}
+
+cJSON* message_json_object(const char* type, cJSON* data) {
+    cJSON* root = cJSON_CreateObject();
+    cJSON_AddStringToObject(root, "type", type);
+    cJSON_AddItemToObject(root, "data", data);
     return root;
 }

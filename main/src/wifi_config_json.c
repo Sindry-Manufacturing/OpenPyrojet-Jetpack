@@ -35,7 +35,7 @@ bool wifi_config_from_json(const cJSON* json, WifiConfig* wifiConfig) {
     return true;
 }
 
-void wifi_config_to_json(cJSON* json, WifiConfig* config) {
+void wifi_config_to_json(cJSON* json, const WifiConfig* config) {
     cJSON_AddStringToObject(json, "ssid", config->ssid);
     cJSON_AddStringToObject(json, "password", "");
 }

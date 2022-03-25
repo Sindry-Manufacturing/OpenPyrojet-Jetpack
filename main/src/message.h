@@ -3,19 +3,18 @@
 
 #include <cJSON.h>
 
-enum MessageType {
-    UNKNOWN,
-    GET_CONFIG,
-    PUT_CONFIG,
-    FIRE_NOZZLE,
-};
+#define INCOMING_MESSAGE_TYPE_GET_CONFIG "get_config"
+#define INCOMING_MESSAGE_TYPE_PUT_CONFIG "put_config"
+#define INCOMING_MESSAGE_TYPE_FIRE_NOZZLE "fire_nozzle"
+
+#define OUTGOING_MESSAGE_TYPE_CONFIG "config"
 
 /**
  * WebSocket JSON message. It's formatted as follows:
  * { type: "GET_CONFIG", data: ... }
  */
 typedef struct {
-    enum MessageType type;
+    char type[32];
     cJSON* data;
 } Message;
 
