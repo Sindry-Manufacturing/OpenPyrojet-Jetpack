@@ -12,6 +12,9 @@ idf_component_register(SRCS "src/main.c"
     "src/wifi_config_json.c"
     "src/jetpack_main.c"
     "src/jetpack_rest.c"
+    "src/websocket_server.c"
+    "src/websocket_server_start.c"
+    "src/websocket_handler.c"
     INCLUDE_DIRS ".")
 
 set(WEB_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/www")

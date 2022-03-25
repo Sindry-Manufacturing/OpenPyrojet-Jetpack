@@ -93,11 +93,11 @@ static esp_ip4_addr_t s_ip_addr;
 
 static void on_wifi_got_ip(
     void* arg,
-    esp_event_base_t event_base,
-    int32_t event_id,
-    void* event_data
+    esp_event_base_t eventBase,
+    int32_t eventId,
+    void* eventData
 ) {
-    ip_event_got_ip_t* event = (ip_event_got_ip_t*) event_data;
+    ip_event_got_ip_t* event = (ip_event_got_ip_t*) eventData;
     if (!is_our_netif(TAG, event->esp_netif)) {
         ESP_LOGW(TAG, "Got IPv4 from another interface \"%s\": ignored", esp_netif_get_desc(event->esp_netif));
         return;
@@ -112,11 +112,11 @@ static void on_wifi_got_ip(
 
 static void on_wifi_got_ipv6(
     void* arg,
-    esp_event_base_t event_base,
-    int32_t event_id,
-    void* event_data
+    esp_event_base_t eventBase,
+    int32_t eventId,
+    void* eventData
 ) {
-    ip_event_got_ip6_t* event = (ip_event_got_ip6_t*)event_data;
+    ip_event_got_ip6_t* event = (ip_event_got_ip6_t*)eventData;
     if (!is_our_netif(TAG, event->esp_netif)) {
         ESP_LOGW(TAG, "Got IPv6 from another netif: ignored");
         return;
@@ -184,9 +184,9 @@ esp_err_t wifi_disconnect() {
 
 static void on_wifi_disconnect(
     void* arg,
-    esp_event_base_t event_base,
-    int32_t event_id,
-    void* event_data
+    esp_event_base_t eventBase,
+    int32_t eventId,
+    void* eventData
 ) {
     ESP_LOGI(TAG, "Wi-Fi disconnected, trying to reconnect...");
     esp_err_t err = esp_wifi_connect();
@@ -199,10 +199,10 @@ static void on_wifi_disconnect(
 #ifdef WIFI_USE_IPV6
 
 static void on_wifi_connect(
-    void *esp_netif,
-    esp_event_base_t event_base,
-    int32_t event_id,
-    void *event_data
+    void* esp_netif,
+    esp_event_base_t eventBase,
+    int32_t eventId,
+    void* eventData
 ) {
     esp_netif_create_ip6_linklocal(esp_netif);
 }
