@@ -26,7 +26,7 @@ is_bin_in_path jq || echo jq not found - install python and run \'pip install jq
 is_bin_in_path esptool.py || echo esptool.py not found - install python and run \'pip install esptool\'
 
 # Validate environment: build files available
-if [ ! -f "build/package/OpenPyrojet.bin" ]; then
+if [ ! -f "build/OpenPyrojet.bin" ]; then
   echo "ERROR: You must run 'idf.py build' first!"
   exit 1
 fi
@@ -44,6 +44,7 @@ mkdir -p build/package/partition_table
 cp build/bootloader/bootloader.bin build/package/bootloader/
 cp build/partition_table/partition-table.bin build/package/partition_table/
 cp build/www.bin build/package/
+cp build/config.bin build/package/
 cp build/OpenPyrojet.bin build/package/
 
 # Create flash command based on partitions
