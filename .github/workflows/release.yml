@@ -1,6 +1,4 @@
-# This is a esp idf workflow to build ESP32 based project
-
-name: Build and Artifact the ESP-IDF Project
+name: Build & Artifact
 
 # Controls when the action will run.
 on:
@@ -24,5 +22,5 @@ jobs:
         uses: espressif/esp-idf-ci-action@main
         with:
           esp_idf_version: v4.4
-          target: esp32s2
+          target: esp32
           path: './'
