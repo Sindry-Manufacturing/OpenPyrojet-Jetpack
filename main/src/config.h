@@ -23,3 +23,4 @@ extern Config config;
 #endif //OPENPYROJET_CONFIG_H
 
 bool config_init();
+bool config_save(const Config* config);

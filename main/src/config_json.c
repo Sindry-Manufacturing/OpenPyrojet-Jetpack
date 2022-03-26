@@ -28,30 +28,44 @@ bool config_read_nozzle_pins(Config* config, const cJSON* jsonArray) {
     return true;
 }
 
-bool config_from_json(Config* config, const char* jsonBuffer) {
-    cJSON* root = cJSON_Parse(jsonBuffer);
-
-    if (!wifi_config_from_json(root, &(config->wifi))) {
-        return false;
+bool config_from_json(Config* config, const cJSON* json) {
+    const cJSON* wifiJson = cJSON_GetObjectItemCaseSensitive(json, "wifi");
+    if (cJSON_IsObject(wifiJson)) {
+        if (!wifi_config_from_json(wifiJson, &(config->wifi))) {
+            return false;
+        }
+    }
+    const cJSON* heatingDurationJson = cJSON_GetObjectItemCaseSensitive(json, "heatingDuration");
+    if (heatingDurationJson != NULL) {
+        config->heatingDuration = heatingDurationJson->valueint;
+        ESP_LOGI(TAG, "heatingDuration = %d µs", config->heatingDuration);
     }
 
-    config->heatingDuration = cJSON_GetObjectItemCaseSensitive(root, "heatingDuration")->valueint;
-    ESP_LOGI(TAG, "heatingDuration = %d µs", config->heatingDuration);
-
-    config->triggerDelay = cJSON_GetObjectItemCaseSensitive(root, "triggerDelay")->valueint;
-    ESP_LOGI(TAG, "triggerDelay = %d µs", config->triggerDelay);
-
-    const cJSON* nozzlePinsJson = cJSON_GetObjectItemCaseSensitive(root, "nozzlePins");
-    if (!config_read_nozzle_pins(config, nozzlePinsJson)) {
-        return false;
+    const cJSON* triggerDelayJson = cJSON_GetObjectItemCaseSensitive(json, "triggerDelay");
+    if (triggerDelayJson != NULL) {
+        config->triggerDelay = triggerDelayJson->valueint;
+        ESP_LOGI(TAG, "triggerDelay = %d µs", config->triggerDelay);
     }
-    ESP_LOGI(TAG, "found %d nozzle pins", config->nozzleCount);
 
-    cJSON_Delete(root);
+    const cJSON* nozzlePinsJson = cJSON_GetObjectItemCaseSensitive(json, "nozzlePins");
+    if (nozzlePinsJson != NULL) {
+        if (!config_read_nozzle_pins(config, nozzlePinsJson)) {
+            return false;
+        }
+        ESP_LOGI(TAG, "found %d nozzle pins", config->nozzleCount);
+    }
+
     return true;
 }
 
-cJSON* config_to_json(const Config* config) {
+bool config_from_json_text(Config* config, const char* jsonBuffer) {
+    cJSON* json = cJSON_Parse(jsonBuffer);
+    bool result = config_from_json(config, json);
+    cJSON_Delete(json);
+    return result;
+}
+
+static cJSON* config_to_json_internal(const Config* config, bool removeRiskItems) {
     cJSON* root = cJSON_CreateObject();
     cJSON_AddNumberToObject(root, "heatingDuration", config->heatingDuration);
     cJSON_AddNumberToObject(root, "triggerDelay", config->triggerDelay);
@@ -73,7 +87,20 @@ cJSON* config_to_json(const Config* config) {
     cJSON_AddItemToObject(root, "nozzlePins", nozzlePins);
 
     cJSON* wifi = cJSON_AddObjectToObject(root, "wifi");
-    wifi_config_to_json(wifi, &config->wifi);
+    if (removeRiskItems) {
+        wifi_config_to_json_safe(wifi, &config->wifi);
+    } else {
+        wifi_config_to_json(wifi, &config->wifi);
+    }
 
     return root;
 }
+
+cJSON* config_to_json_safe(const Config* config) {
+    return config_to_json_internal(config, true);
+}
+
+cJSON* config_to_json(const Config* config) {
+    return config_to_json_internal(config, false);
+}
+

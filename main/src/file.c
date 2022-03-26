@@ -17,7 +17,7 @@ long file_get_size(FILE* file) {
 }
 
 long file_copy(const char* fromPath, const char* toPath) {
-   FILE* sourceFile = fopen(fromPath, "r");
+    FILE* sourceFile = fopen(fromPath, "r");
     if (sourceFile == NULL) {
         ESP_LOGE(TAG, "failed to open target file %s", fromPath);
         return -1;

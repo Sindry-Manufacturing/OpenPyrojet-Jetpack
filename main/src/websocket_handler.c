@@ -17,7 +17,7 @@ const httpd_uri_t websocketHandlerUri = {
 };
 
 static esp_err_t handle_get_config(httpd_req_t* request) {
-    cJSON* dataJson = config_to_json(&config);
+    cJSON* dataJson = config_to_json_safe(&config);
     cJSON* messageJson = message_json_object("config", dataJson);
     char* messageJsonText = cJSON_PrintUnformatted(messageJson);
 
@@ -34,6 +34,20 @@ static esp_err_t handle_get_config(httpd_req_t* request) {
     cJSON_Delete(messageJson);
 
     return result;
+}
+
+static esp_err_t handle_put_config(const Message* message) {
+    if (!config_from_json(&config, message->data)) {
+        ESP_LOGW(TAG, "failed to parse incoming Message data as Config");
+        return ESP_FAIL;
+    }
+
+    if (!config_save(&config)) {
+        ESP_LOGE(TAG, "failed to save config");
+        return ESP_FAIL;
+    }
+
+    return ESP_OK;
 }
 
 static esp_err_t websocket_handler(httpd_req_t* request) {
@@ -60,6 +74,7 @@ static esp_err_t websocket_handler(httpd_req_t* request) {
             if (strcmp(message.type, INCOMING_MESSAGE_TYPE_GET_CONFIG) == 0) {
                 result = handle_get_config(request);
             } else if (strcmp(message.type, INCOMING_MESSAGE_TYPE_PUT_CONFIG) == 0) {
+                result = handle_put_config(&message);
             } else if (strcmp(message.type, INCOMING_MESSAGE_TYPE_FIRE_NOZZLE) == 0) {
             } else {
             }

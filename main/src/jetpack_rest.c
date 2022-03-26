@@ -10,7 +10,7 @@ static esp_err_t jetpack_config_put_handler(httpd_req_t* request) {
         return ESP_FAIL;
     }
 
-    config_from_json(&config, buffer);
+    config_from_json_text(&config, buffer);
     httpd_resp_sendstr(request, "");
     return ESP_OK;
 }

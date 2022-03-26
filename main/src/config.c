@@ -1,6 +1,7 @@
 #include "config.h"
 #include "config_json.h"
 #include <esp_log.h>
+#include <string.h>
 
 #include "cJSON.h"
 
@@ -54,5 +55,28 @@ bool config_init() {
     buffer[bytesRead] = '\0';
     fclose(file);
 
-    return config_from_json(&config, buffer);
+    return config_from_json_text(&config, buffer);
+}
+
+bool config_save(const Config* config) {
+    cJSON* configJson = config_to_json(config);
+    const char* configJsonText = cJSON_PrintUnformatted(configJson);
+
+    FILE* targetFile = fopen(userConfigPath, "w");
+    if (targetFile == NULL) {
+        ESP_LOGE(TAG, "failed to open target file %s", userConfigPath);
+        return false;
+    }
+
+    long characters = strlen(configJsonText);
+    for (long i = 0; i < characters; ++i) {
+        fputc(configJsonText[i], targetFile);
+    }
+
+    fclose(targetFile);
+
+    // We only need to delete the root cJSON, because the data cJSON gets deleted with it
+    cJSON_Delete(configJson);
+
+    return true;
 }

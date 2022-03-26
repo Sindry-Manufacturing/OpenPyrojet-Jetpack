@@ -9,18 +9,13 @@ bool wifi_config_from_json(const cJSON* json, WifiConfig* wifiConfig) {
     wifiConfig->ssid[0] = 0;
     wifiConfig->password[0] = 0;
 
-    const cJSON* wifiJson = cJSON_GetObjectItemCaseSensitive(json, "wifi");
-    if (cJSON_IsNull(wifiJson)) {
-        ESP_LOGE(TAG, "wifi config not found");
-        return false;
-    }
-    const cJSON* ssidJson = cJSON_GetObjectItemCaseSensitive(wifiJson, "ssid");
+   const cJSON* ssidJson = cJSON_GetObjectItemCaseSensitive(json, "ssid");
     if (cJSON_IsNull(ssidJson) || !cJSON_IsString(ssidJson)) {
         ESP_LOGE(TAG, "wifi ssid is not a string");
         return false;
     }
 
-    const cJSON* passwordJson = cJSON_GetObjectItemCaseSensitive(wifiJson, "password");
+    const cJSON* passwordJson = cJSON_GetObjectItemCaseSensitive(json, "password");
     if (cJSON_IsNull(passwordJson) || !cJSON_IsString(passwordJson)) {
         ESP_LOGE(TAG, "wifi password is not a string");
         return false;
@@ -35,7 +30,19 @@ bool wifi_config_from_json(const cJSON* json, WifiConfig* wifiConfig) {
     return true;
 }
 
-void wifi_config_to_json(cJSON* json, const WifiConfig* config) {
+static void wifi_config_to_json_internal(cJSON* json, const WifiConfig* config, bool removeRiskItems) {
     cJSON_AddStringToObject(json, "ssid", config->ssid);
-    cJSON_AddStringToObject(json, "password", "");
+    if (!removeRiskItems) {
+        cJSON_AddStringToObject(json, "password", config->password);
+    } else {
+        cJSON_AddNullToObject(json, "password");
+    }
+}
+
+void wifi_config_to_json(cJSON* root, const WifiConfig* config) {
+    wifi_config_to_json_internal(root, config, false);
+}
+
+void wifi_config_to_json_safe(cJSON* root, const WifiConfig* config) {
+    wifi_config_to_json_internal(root, config, true);
 }
