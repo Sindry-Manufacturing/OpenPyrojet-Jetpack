@@ -3,6 +3,7 @@
 
 #include "message_json.h"
 #include "config_json.h"
+#include "jetpack_main.h"
 
 static const char* TAG = "websocket-handler";
 
@@ -50,6 +51,18 @@ static esp_err_t handle_put_config(const Message* message) {
     return ESP_OK;
 }
 
+static esp_err_t handle_fire_nozzle(const Message* message) {
+    if (!cJSON_IsNumber(message->data)) {
+        ESP_LOGE(TAG, "nozzle id is not a number");
+        return ESP_FAIL;
+    }
+
+    long nozzleId = cJSON_GetNumberValue(message->data);
+    jetpack_fire((uint8)nozzleId);
+
+    return ESP_OK;
+}
+
 static esp_err_t websocket_handler(httpd_req_t* request) {
     uint8_t payload[128] = {0};
     httpd_ws_frame_t frame;
@@ -76,6 +89,7 @@ static esp_err_t websocket_handler(httpd_req_t* request) {
             } else if (strcmp(message.type, INCOMING_MESSAGE_TYPE_PUT_CONFIG) == 0) {
                 result = handle_put_config(&message);
             } else if (strcmp(message.type, INCOMING_MESSAGE_TYPE_FIRE_NOZZLE) == 0) {
+                result = handle_fire_nozzle(&message);
             } else {
             }
             cJSON_Delete(messageJson);
