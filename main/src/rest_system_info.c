@@ -1,6 +1,6 @@
 #include "rest_system_info.h"
-#include "cJSON.h"
-#include "esp_log.h"
+#include <cJSON.h>
+#include <esp_log.h>
 
 static esp_err_t system_info_get_handler(httpd_req_t* request)
 {
@@ -22,7 +22,7 @@ void system_info_register_uri_handler(
     rest_server_context_t* rest_context
 ) {
     httpd_uri_t system_info_get_uri = {
-        .uri = "/api/v1/system/info",
+        .uri = "/api/sysinfo",
         .method = HTTP_GET,
         .handler = system_info_get_handler,
         .user_ctx = rest_context

@@ -6,8 +6,8 @@
 static const char* TAG = "wifi-config-json";
 
 bool wifi_config_from_json(const cJSON* json, WifiConfig* wifiConfig) {
-    wifiConfig->ssid[0] = 0;
-    wifiConfig->password[0] = 0;
+    memset(wifiConfig->ssid, 0, sizeof(wifiConfig->ssid));
+    memset(wifiConfig->password, 0, sizeof(wifiConfig->password));
 
    const cJSON* ssidJson = cJSON_GetObjectItemCaseSensitive(json, "ssid");
     if (cJSON_IsNull(ssidJson) || !cJSON_IsString(ssidJson)) {
