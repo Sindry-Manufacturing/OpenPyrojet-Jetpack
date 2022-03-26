@@ -1,0 +1,25 @@
+name: Build and Artifact the ESP-IDF Project
+
+on:
+  # Triggers the workflow on tag create like v1.0, v2.0.0 and so on
+  push:
+    tags:
+      - 'v*'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+      - name: Install ESP-IDF and Build project
+        uses: rmshub/esp-idf-action@v4
+        with:
+          esp_idf_version: 'v4.4'
+          esp_idf_target: 'esp32'
+      - run: ./package.sh
+      - name: Archive build output artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: build/package/**
