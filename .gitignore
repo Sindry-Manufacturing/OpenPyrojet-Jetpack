@@ -11,5 +11,6 @@ Makefile
 
 sdkconfig
 build/
+venv/
 
 main/config/user.json
