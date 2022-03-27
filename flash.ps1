@@ -14,6 +14,6 @@ $jsonClean = $json.flash_files -replace '[\{\}\@\;]', ''
 $jsonClean = $jsonClean -replace '[\=]', ' '
 
 cd build
-$command = "esptool.py --port $port -b 460800 write_flash $jsonClean"
+$command = "esptool.py --connect-attemps 10 --port $port -b 460800 write_flash $jsonClean"
 Invoke-Expression $command
 cd ..
