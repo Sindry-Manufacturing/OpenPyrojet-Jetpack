@@ -23,7 +23,6 @@ function is_bin_in_path {
 
 # Validate environment: tools
 is_bin_in_path jq || echo jq not found - install python and run \'pip install jq\'
-is_bin_in_path esptool.py || echo esptool.py not found - install python and run \'pip install esptool\'
 
 # Validate environment: build files available
 if [ ! -f "build/OpenPyrojet.bin" ]; then

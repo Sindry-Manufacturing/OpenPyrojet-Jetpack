@@ -1,13 +1,10 @@
 name: Build & Artifact
 
-# Controls when the action will run.
 on:
-  # Triggers the workflow on tag create like v1.0, v2.0.0 and so on
   push:
     tags:
       - 'v*'
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
@@ -24,9 +21,9 @@ jobs:
           esp_idf_version: v4.4
           target: esp32
           path: './'
-      - run: ./package.sh
+      - run: cd app && ./package.sh
       - name: Archive build output artifacts
         uses: actions/upload-artifact@v2
         with:
           name: build
-          path: build/package/**
+          path: app/build/package/**
