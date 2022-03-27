@@ -1,4 +1,5 @@
 # OpenPyrojet Jetpack
+[![release badge](https://img.shields.io/github/v/release/Sindry-Manufacturing/OpenPyrojet-Jetpack?include_prereleases)](./releases)
 
 This is the print head firmware project, designed for ESP32.
 
