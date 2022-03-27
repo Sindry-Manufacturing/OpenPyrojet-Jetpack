@@ -12,8 +12,11 @@ Developers can check out our [Development Docs](docs/development.md).
 
 ## Hardware Required
 
-To run Jetpack, you need an ESP32 dev board (e.g. ESP32-WROVER Kit) or ESP32 core board (e.g. ESP32-DevKitC).
-The ESP32 must have 4MB of ROM.
+To run Jetpack, you need an ESP32 dev board (e.g. Wemos D1 Mini, ESP32-WROVER Kit) or ESP32 core board (e.g. ESP32-DevKitC).
+The ESP32 must have `4 MB` of SPI flash memory on board.
+
+The preferred board is a `Wemos Mini D1` with the `CP2104` USB-to-UART bridge.
+Other boards tend to be less reliable when it comes to flashing. (see FAQ)
 
 ## Flashing Jetpack
 
@@ -76,6 +79,11 @@ When you pressed save, you should see a popup that confirms it.
 Now reboot the ESP32. It should connect to your Wi-Fi network.
 
 You can now use [Jetpack.js](https://github.com/Sindry-Manufacturing/OpenPyrojet-Jetpack.js) to connect to the device from your phone/laptop/desktop.
+
+## FAQ
+
+- Q: The ESP32 is stuck "Connecting..." while trying to flash the firmware.
+- A: Some ESP32 devices have a different USB/UART implementation. To flash, press the "boot" or "reset" button every 1 to 2 seconds until firmware flashing continues.
 
 ## License
 
