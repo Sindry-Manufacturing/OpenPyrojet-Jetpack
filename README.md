@@ -27,7 +27,8 @@ The ESP32 must have 4MB of ROM.
 
 #### Flashing
 
-1. Unzip the package
+1. Unzip the package and open a terminal from this folder
+2. Make the script executable: `chmod +x ./flash.sh`
 2. Run `./flash.sh (DEVICE)` (where `(DEVICE)` is something like `/dev/ttyUSB0`)
 
 ### Windows
