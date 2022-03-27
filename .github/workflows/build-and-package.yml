@@ -21,8 +21,20 @@ jobs:
           esp_idf_version: v4.4
           target: esp32
           path: './'
-      - run: pwd
-      - run: ./package.sh
+      - run: mkdir -p build/package
+      - run: mkdir -p build/package/bootloader
+      - run: mkdir -p build/package/partition_table
+      - run: cp build/bootloader/bootloader.bin build/package/bootloader/
+      - run: cp build/partition_table/partition-table.bin build/package/partition_table/
+      - run: cp build/www.bin build/package/
+      - run: cp build/config.bin build/package/
+      - run: cp build/OpenPyrojet.bin build/package/
+      - run: KEY_VALUES=`jq -r '.flash_files  | keys[] as $k | "\($k) \(.[$k])"' build/flasher_args.json  | tr "\n" " "`
+      - run: LINUX_COMMAND="esptool.py --port \$1 write_flash $KEY_VALUES"
+      - run: WINDOWS_COMMAND="esptool.py --port %1 write_flash $KEY_VALUES"
+      - run: echo $LINUX_COMMAND > build/package/flash.sh
+      - run: chmod +x build/package/flash.sh
+      - run: echo $WINDOWS_COMMAND > build/package/flash.bat
       - name: Archive build output artifacts
         uses: actions/upload-artifact@v2
         with:
