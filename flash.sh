@@ -1,9 +1,8 @@
 # Usage:
-#   flash.sh [port] [folder]
+#   flash.sh [port]
 #
 # Arguments:
 #   port - the port of the device (e.g. /dev/ttyUSB0, ...)
-#   folder - folder where the build files can be found (optional)
 #
 # Requirements:
 #   jq - run 'pip install jq'
