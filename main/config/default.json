@@ -4,6 +4,6 @@
     "password" : ""
   },
   "nozzlePins": [18, 19],
-  "heatingDuration": 100000,
-  "triggerDelay": 50000
+  "heatingDuration": 1000,
+  "triggerDelay": 1000
 }
