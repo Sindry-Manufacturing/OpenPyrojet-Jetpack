@@ -32,15 +32,4 @@ jobs:
             build/config.bin
             build/www.bin
             build/OpenPyrojet.bin
-            tools/flash.sh
-#  finalize:
-#      runs-on: ubuntu-latest
-#      steps:
-#        - name: Download Artifacts
-#          uses: actions/download-artifact@master
-#          with:
-#            name: build
-#            path: build
-#        - name: Display structure of downloaded files
-#          run: ls -R
-#          working-directory: build/
+            flash.sh

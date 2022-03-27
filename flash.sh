@@ -26,7 +26,8 @@ function is_bin_in_path {
 is_bin_in_path jq || echo jq not found - install python and run \'pip install jq\'
 is_bin_in_path esptool.py || echo esptool.py not found - install python and run \'pip install esptool\'
 
+cd build
 # Create flash command based on partitions
-KEY_VALUES=`jq -r '.flash_files  | keys[] as $k | "\($k) \(.[$k])"' $2flasher_args.json  | tr "\n" " "`
+KEY_VALUES=`jq -r '.flash_files  | keys[] as $k | "\($k) \(.[$k])"' flasher_args.json  | tr "\n" " "`
 esptool.py --port $1 -b 921600 write_flash $KEY_VALUES
-
+cd -
