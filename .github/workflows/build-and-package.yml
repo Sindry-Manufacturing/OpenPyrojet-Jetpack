@@ -29,6 +29,8 @@ jobs:
       - run: echo $WINDOWS_COMMAND > build/flash.bat
       - name: Archive build output artifacts
         uses: actions/upload-artifact@v2
+        with:
+          name: build
           path: |
             build/bootloader/bootloader.bin
             build/partition_table/partition-table.bin
