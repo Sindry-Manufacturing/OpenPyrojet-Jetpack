@@ -9,7 +9,7 @@ See our [Development Docs](docs/development.md).
 ## Hardware Required
 
 To run this firmware, you need an ESP32 dev board (e.g. ESP32-WROVER Kit) or ESP32 core board (e.g. ESP32-DevKitC).
-The ESP32 must have 4MB of ROM to be able to host all website files.
+The ESP32 must have 4MB of ROM.
 
 ## Getting Started
 
