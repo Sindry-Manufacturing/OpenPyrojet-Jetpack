@@ -33,3 +33,4 @@ jobs:
             build/www.bin
             build/OpenPyrojet.bin
             flash.sh
+            flash.ps1
