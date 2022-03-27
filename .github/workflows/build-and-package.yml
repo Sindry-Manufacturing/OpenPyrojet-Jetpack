@@ -21,7 +21,7 @@ jobs:
           esp_idf_version: v4.4
           target: esp32
           path: './'
-      - run: cd app && ./package.sh
+      - run: ./package.sh
       - name: Archive build output artifacts
         uses: actions/upload-artifact@v2
         with:
