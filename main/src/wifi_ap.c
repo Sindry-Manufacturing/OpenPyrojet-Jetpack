@@ -64,7 +64,7 @@ void wifi_ap_init() {
     ESP_ERROR_CHECK(esp_wifi_start());
 }
 
-bool wifi_ap() {
+bool wifi_ap_start() {
     wifi_config_t wifiConfig = { 0 };
     strcpy((char*)wifiConfig.ap.ssid, CONFIG_AP_WIFI_SSID);
     strcpy((char*)wifiConfig.ap.password, CONFIG_AP_WIFI_PASSWORD);
