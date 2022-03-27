@@ -24,9 +24,9 @@ jobs:
       - run: KEY_VALUES=`jq -r '.flash_files  | keys[] as $k | "\($k) \(.[$k])"' build/flasher_args.json  | tr "\n" " "`
       - run: LINUX_COMMAND="esptool.py --port \$1 write_flash $KEY_VALUES"
       - run: WINDOWS_COMMAND="esptool.py --port %1 write_flash $KEY_VALUES"
-      - run: echo $LINUX_COMMAND > build/flash.sh
+      - run: echo $LINUX_COMMAND > /app/build/flash.sh
       - run: chmod +x build/flash.sh
-      - run: echo $WINDOWS_COMMAND > build/flash.bat
+      - run: echo $WINDOWS_COMMAND > /app/build/flash.bat
       - name: Archive build output artifacts
         uses: actions/upload-artifact@v2
         with:
