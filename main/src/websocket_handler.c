@@ -9,7 +9,7 @@ static const char* TAG = "websocket-handler";
 
 static esp_err_t websocket_handler(httpd_req_t*);
 
-const httpd_uri_t websocketHandlerUri = {
+httpd_uri_t websocketHandlerUri = {
     .uri        = "/",
     .method     = HTTP_GET,
     .handler    = websocket_handler,
