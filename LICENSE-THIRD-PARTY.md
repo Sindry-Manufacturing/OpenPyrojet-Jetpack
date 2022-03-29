@@ -32,7 +32,7 @@ The code license for `wifi_ap.c` and `wifi_ap.c` are licensed by the GPL v3 lice
 
 # SSD1306
 
-The `ssd3306` driver is made by `nopnop2002` and copied from https://github.com/nopnop2002/esp-idf-ssd1306
+The `ssd1306` driver is made by `nopnop2002` and copied from https://github.com/nopnop2002/esp-idf-ssd1306
 
 The original license:
 
