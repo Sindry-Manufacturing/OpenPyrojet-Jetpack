@@ -11,13 +11,26 @@ Developers can check out our [Development Docs](docs/development.md).
 `Jetpack` can be controlled by a front-end like [Jetpack.js](https://github.com/Sindry-Manufacturing/OpenPyrojet-Jetpack.js).
 `Jetpack.js` can run on any web server or your local machine.
 
-## Hardware Required
+## Hardware 
+
+### ESP32
 
 To run Jetpack, you need an ESP32 dev board (e.g. Wemos D1 Mini, ESP32-WROVER Kit) or ESP32 core board (e.g. ESP32-DevKitC).
 The ESP32 must have `4 MB` of SPI flash memory on board.
 
 The preferred board is a `Wemos Mini D1` with the `CP2104` USB-to-UART bridge.
 Other boards tend to be less reliable when it comes to flashing. (see FAQ)
+
+### Display (optional)
+
+You can connect a `128 x 64 pixel` OLED display driven by an `SSD1306` chip.
+We currently support only support `i2c` protocol.
+
+Display to ESP32 connections:
+- `GND` to `GND`
+- `VDD` to `3.3V`
+- `SCK` to `GPIO 22`
+- `SDA` to `GPIO 21`
 
 ## Flashing Jetpack
 

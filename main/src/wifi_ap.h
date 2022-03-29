@@ -3,6 +3,9 @@
 
 #include <stdbool.h>
 
+#define CONFIG_AP_WIFI_SSID "OpenPyrojet"
+#define CONFIG_AP_WIFI_PASSWORD "openpyrojet"
+
 void wifi_ap_init();
 bool wifi_ap_start();
 

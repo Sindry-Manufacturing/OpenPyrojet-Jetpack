@@ -15,6 +15,8 @@
 
 #include "wifi_config.h"
 
+#include "display.h"
+
 #ifdef WIFI_USE_IPV6
 #define MAX_IP6_ADDRS_PER_NETIF (5)
 #define NR_OF_IP_ADDRESSES_TO_WAIT_FOR (s_active_interfaces*2)
@@ -158,6 +160,7 @@ esp_err_t wifi_connect(void) {
             ESP_ERROR_CHECK(esp_netif_get_ip_info(netif, &ip));
             ESP_LOGI(TAG, "- IPv4 address: "
             IPSTR, IP2STR(&ip.ip));
+            display_show_wifi_normal_mode(ip.ip);
 #ifdef WIFI_USE_IPV6
             esp_ip6_addr_t ip6[MAX_IP6_ADDRS_PER_NETIF];
             int ip6_addrs = esp_netif_get_all_ip6(netif, ip6);

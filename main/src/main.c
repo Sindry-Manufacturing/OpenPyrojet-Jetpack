@@ -14,6 +14,7 @@
 #include "fs_init.h"
 #include "websocket_server_start.h"
 #include "rest_server.h"
+#include "display.h"
 
 static const char* TAG = "application";
 
@@ -32,7 +33,14 @@ void app_main(void) {
     ESP_ERROR_CHECK(fs_init());
     ESP_ERROR_CHECK(jetpack_init()); // Config and IO
 
+    display_start();
+
+    esp_ip4_addr_t noIp = {
+        .addr = 0
+    };
+
     if (strlen(config.wifi.ssid) > 0) {
+       display_show_wifi_normal_mode(noIp);
         ESP_LOGI(TAG, "normal mode");
         ESP_ERROR_CHECK(esp_netif_init());
         ESP_ERROR_CHECK(esp_event_loop_create_default());
@@ -40,6 +48,7 @@ void app_main(void) {
         ESP_ERROR_CHECK(wifi_connect());
         ESP_ERROR_CHECK(websocket_server_start());
     } else {
+        display_show_wifi_ap_mode(CONFIG_AP_WIFI_SSID, CONFIG_AP_WIFI_PASSWORD, noIp);
         ESP_LOGI(TAG, "configuration mode");
         wifi_ap_init();
         wifi_ap_start();

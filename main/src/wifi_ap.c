@@ -13,9 +13,10 @@
 #include "esp_wifi.h"
 #include "esp_event.h"
 #include "esp_log.h"
+#include "esp_netif.h"
 
-#define CONFIG_AP_WIFI_SSID "OpenPyrojet"
-#define CONFIG_AP_WIFI_PASSWORD "openpyrojet"
+#include "display.h"
+
 #define CONFIG_AP_WIFI_CONNECTION_LIMIT 4
 
 static const char* TAG = "wifi-ap";
@@ -87,6 +88,25 @@ bool wifi_ap_start() {
          wifiConfig.ap.password,
          wifiConfig.ap.channel
      );
+
+    esp_netif_t* netif = NULL;
+    esp_netif_ip_info_t ip;
+    for (int i = 0; i < esp_netif_get_nr_of_ifs(); ++i) {
+        netif = esp_netif_next(netif);
+        if (strcmp(esp_netif_get_desc(netif), "ap") == 0) {
+            ESP_ERROR_CHECK(esp_netif_get_ip_info(netif, &ip));
+            ESP_LOGI(TAG, "Access point IPv4 address: " IPSTR, IP2STR(&ip.ip));
+            display_show_wifi_ap_mode(CONFIG_AP_WIFI_SSID, CONFIG_AP_WIFI_PASSWORD, ip.ip);
+#ifdef WIFI_USE_IPV6
+            esp_ip6_addr_t ip6[MAX_IP6_ADDRS_PER_NETIF];
+            int ip6_addrs = esp_netif_get_all_ip6(netif, ip6);
+            for (int j = 0; j < ip6_addrs; ++j) {
+                esp_ip6_addr_type_t ipv6_type = esp_netif_ip6_get_addr_type(&(ip6[j]));
+                ESP_LOGI(TAG, "Access point IPv6 address: " IPV6STR ", type: %s", IPV62STR(ip6[j]), s_ipv6_addr_types[ipv6_type]);
+            }
+#endif
+        }
+   }
 
     return ESP_OK;
 }
