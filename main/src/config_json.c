@@ -1,7 +1,7 @@
 #include "config_json.h"
+
 #include <esp_log.h>
-#include <stdlib.h>
-#include <string.h>
+
 #include "wifi_config_json.h"
 
 static const char* TAG = "config-json";

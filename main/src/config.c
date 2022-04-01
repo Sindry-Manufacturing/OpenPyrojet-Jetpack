@@ -2,9 +2,7 @@
 #include "config_json.h"
 #include <esp_log.h>
 #include <string.h>
-
-#include "cJSON.h"
-
+#include <cJSON.h>
 #include "file.h"
 
 static const char* TAG = "config";

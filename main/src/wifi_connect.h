@@ -3,10 +3,9 @@
  * This code is based on example code from the ESP IDF SDK.
  */
 
-#pragma once
-
 #include <esp_err.h>
 #include <esp_netif.h>
+
 #include "types.h"
 #include "wifi_config.h"
 
@@ -52,7 +51,3 @@ esp_netif_t* wifi_get_netif();
  *
  */
 esp_netif_t* wifi_get_netif_from_desc(const char* desc);
-
-#ifdef __cplusplus
-}
-#endif

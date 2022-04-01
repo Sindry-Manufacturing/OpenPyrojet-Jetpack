@@ -2,6 +2,7 @@
 #define OPENPYROJET_REST_WIFI_H
 
 #include <esp_http_server.h>
+
 #include "rest_base.h"
 
 void register_wifi_uri_handler(

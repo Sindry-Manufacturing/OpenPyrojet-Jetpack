@@ -8,10 +8,13 @@
 #include "esp_netif.h"
 #include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"
+#include "lwip/err.h"
+
+#ifdef WIFI_USE_IPV6
 #include "freertos/task.h"
 #include "freertos/event_groups.h"
-#include "lwip/err.h"
 #include "lwip/sys.h"
+#endif
 
 #include "wifi_config.h"
 

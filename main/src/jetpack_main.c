@@ -1,7 +1,9 @@
 #include "jetpack_main.h"
+
+#include <esp_log.h>
+#include <driver/gpio.h>
+
 #include "config.h"
-#include "esp_log.h"
-#include "driver/gpio.h"
 #include "time.h"
 
 const char* TAG = "jetpack";

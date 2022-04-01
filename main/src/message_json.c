@@ -1,5 +1,5 @@
 #include "message_json.h"
-#include <stdlib.h>
+
 #include <string.h>
 
 /**

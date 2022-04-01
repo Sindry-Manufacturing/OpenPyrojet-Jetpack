@@ -3,6 +3,7 @@
 
 #include <cJSON.h>
 #include <stdbool.h>
+
 #include "wifi_config.h"
 
 bool wifi_config_from_json(const cJSON* json, WifiConfig* wifiConfig);

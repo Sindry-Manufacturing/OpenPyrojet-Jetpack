@@ -1,5 +1,7 @@
 #include "rest_wildcard.h"
+
 #include <fcntl.h>
+
 #include "esp_log.h"
 
 #define FILE_PATH_MAX (ESP_VFS_PATH_MAX + 128)

@@ -2,6 +2,7 @@
 #define OPENPYROJET_CONFIG_H
 
 #include <esp_err.h>
+
 #include "types.h"
 #include "wifi_config.h"
 

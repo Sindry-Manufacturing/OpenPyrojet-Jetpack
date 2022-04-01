@@ -1,4 +1,5 @@
 #include "display.h"
+
 #include <string.h>
 
 #include "ssd1306/ssd1306.h"
