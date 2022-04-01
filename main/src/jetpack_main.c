@@ -6,7 +6,7 @@
 #include "config.h"
 #include "time.h"
 
-const char* TAG = "jetpack";
+static const char* TAG = "jetpack";
 
 static uint64 gpio_pin_bit_mask(const Config* config) {
     uint64 pinBitMask = 0ULL;
@@ -17,16 +17,16 @@ static uint64 gpio_pin_bit_mask(const Config* config) {
     return pinBitMask;
 }
 
-
 static void jetpack_init_gpio(Config* config) {
     uint64 pinBitMask = gpio_pin_bit_mask(config);
-    gpio_config_t gpioConfig;
-    gpioConfig.intr_type = GPIO_INTR_DISABLE;
-    gpioConfig.mode = GPIO_MODE_OUTPUT;
-    gpioConfig.pin_bit_mask = pinBitMask;
-    gpioConfig.pull_down_en = 0; // disabled
-    gpioConfig.pull_up_en = 0; // disabled
-    gpio_config(&gpioConfig);
+    gpio_config_t gpio = {
+        .intr_type = GPIO_INTR_DISABLE,
+        .mode = GPIO_MODE_OUTPUT,
+        .pin_bit_mask = pinBitMask,
+        .pull_down_en = 0, // disabled
+        .pull_up_en = 0 // disabled
+    };
+    gpio_config(&gpio);
 }
 
 esp_err_t jetpack_init() {
