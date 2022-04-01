@@ -1,4 +1,11 @@
 {
+  "display" : {
+    "pinScl" : 22,
+    "pinSda" : 21,
+    "pinReset" : -1,
+    "pixelWidth" : 128,
+    "pixelHeight" : 64
+  },
   "wifi" : {
     "ssid" : "",
     "password" : ""

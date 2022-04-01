@@ -2,6 +2,7 @@
 
 #include <esp_log.h>
 
+#include "display_config_json.h"
 #include "wifi_config_json.h"
 
 static const char* TAG = "config-json";
@@ -29,13 +30,21 @@ bool config_read_nozzle_pins(Config* config, const cJSON* jsonArray) {
 }
 
 bool config_from_json(Config* config, const cJSON* json) {
+    const cJSON* displayJson = cJSON_GetObjectItemCaseSensitive(json, "display");
+    if (cJSON_IsObject(displayJson)) {
+        if (!display_config_from_json(displayJson, &(config->display))) {
+            return false;
+        }
+    }
+
     const cJSON* wifiJson = cJSON_GetObjectItemCaseSensitive(json, "wifi");
     if (cJSON_IsObject(wifiJson)) {
         if (!wifi_config_from_json(wifiJson, &(config->wifi))) {
             return false;
         }
     }
-    const cJSON* heatingDurationJson = cJSON_GetObjectItemCaseSensitive(json, "heatingDuration");
+
+   const cJSON* heatingDurationJson = cJSON_GetObjectItemCaseSensitive(json, "heatingDuration");
     if (heatingDurationJson != NULL) {
         config->heatingDuration = heatingDurationJson->valueint;
         ESP_LOGI(TAG, "heatingDuration = %d µs", config->heatingDuration);
@@ -92,6 +101,9 @@ static cJSON* config_to_json_internal(const Config* config, bool removeRiskItems
     } else {
         wifi_config_to_json(wifi, &config->wifi);
     }
+
+    cJSON* display = cJSON_AddObjectToObject(root, "display");
+    display_config_to_json(display, &config->display);
 
     return root;
 }
