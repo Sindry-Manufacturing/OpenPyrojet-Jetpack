@@ -2,7 +2,6 @@
 #include <esp_netif.h>
 #include <esp_event.h>
 #include <esp_log.h>
-#include <esp_http_server.h>
 
 #include "sdkconfig.h"
 #include "wifi_connect.h"
@@ -15,7 +14,6 @@
 #include "display.h"
 
 static const char* TAG = "application";
-
 
 esp_err_t nvs_flash_init_safely() {
     esp_err_t flashInitResult = nvs_flash_init();
@@ -41,17 +39,19 @@ void app_main(void) {
         .addr = 0
     };
 
-    if (strlen(config.wifi.ssid) > 0) {
-        display_show_wifi_normal_mode(noIp);
+    if (wifi_config_is_usable(&config.wifi)) {
+        // Start wifi client and websocket server ("normal mode")
         ESP_LOGI(TAG, "normal mode");
+        display_show_wifi_normal_mode(noIp);
         ESP_ERROR_CHECK(esp_netif_init());
         ESP_ERROR_CHECK(esp_event_loop_create_default());
         wifi_config(&(config.wifi));
         ESP_ERROR_CHECK(wifi_connect());
         ESP_ERROR_CHECK(websocket_server_start());
     } else {
-        display_show_wifi_ap_mode(CONFIG_AP_WIFI_SSID, CONFIG_AP_WIFI_PASSWORD, noIp);
+        // Start wifi Access Point and REST server ("configuration mode")
         ESP_LOGI(TAG, "configuration mode");
+        display_show_wifi_ap_mode(CONFIG_AP_WIFI_SSID, CONFIG_AP_WIFI_PASSWORD, noIp);
         wifi_ap_init();
         wifi_ap_start();
         ESP_ERROR_CHECK(rest_server_start(MOUNT_POINT_WWW));

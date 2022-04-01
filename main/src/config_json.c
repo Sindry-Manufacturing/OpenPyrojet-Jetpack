@@ -4,6 +4,7 @@
 
 #include "display_config_json.h"
 #include "wifi_config_json.h"
+#include "json.h"
 
 static const char* TAG = "config-json";
 
@@ -34,6 +35,16 @@ bool config_from_json(Config* config, const cJSON* json) {
     if (cJSON_IsObject(displayJson)) {
         if (!display_config_from_json(displayJson, &(config->display))) {
             return false;
+        } else {
+            ESP_LOGI(
+                TAG,
+                "display: pinSda %d, pinScl %d, pinReset %d, pixelWidth %d, pixelHeight %d",
+                config->display.pinSda,
+                config->display.pinScl,
+                config->display.pinReset,
+                config->display.pixelWidth,
+                config->display.pixelHeight
+            );
         }
     }
 
@@ -44,16 +55,14 @@ bool config_from_json(Config* config, const cJSON* json) {
         }
     }
 
-   const cJSON* heatingDurationJson = cJSON_GetObjectItemCaseSensitive(json, "heatingDuration");
-    if (heatingDurationJson != NULL) {
-        config->heatingDuration = heatingDurationJson->valueint;
-        ESP_LOGI(TAG, "heatingDuration = %d µs", config->heatingDuration);
+    int heatingDuration;
+    if (json_object_get_property_as_integer(json, "heatingDuration", &heatingDuration) && heatingDuration > 0) {
+        config->heatingDuration = (int) heatingDuration;
     }
 
-    const cJSON* triggerDelayJson = cJSON_GetObjectItemCaseSensitive(json, "triggerDelay");
-    if (triggerDelayJson != NULL) {
-        config->triggerDelay = triggerDelayJson->valueint;
-        ESP_LOGI(TAG, "triggerDelay = %d µs", config->triggerDelay);
+    int triggerDelay;
+    if (json_object_get_property_as_integer(json, "triggerDelay", &triggerDelay) && triggerDelay >= 0) {
+        config->triggerDelay = (int) triggerDelay;
     }
 
     const cJSON* nozzlePinsJson = cJSON_GetObjectItemCaseSensitive(json, "nozzlePins");
