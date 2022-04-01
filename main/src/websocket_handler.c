@@ -1,3 +1,7 @@
+/**
+ * This code is based on:
+ *   $IDF_PATH/examples/protocols/http_server/ws_echo_server
+ */
 #include "websocket_handler.h"
 #include <esp_log.h>
 
@@ -63,39 +67,85 @@ static esp_err_t handle_fire_nozzle(const Message* message) {
     return ESP_OK;
 }
 
-static esp_err_t websocket_handler(httpd_req_t* request) {
-    uint8_t payload[128] = {0};
-    httpd_ws_frame_t frame;
-    memset(&frame, 0, sizeof(httpd_ws_frame_t));
-    frame.payload = payload;
-    frame.type = HTTPD_WS_TYPE_TEXT;
-    esp_err_t result = httpd_ws_recv_frame(request, &frame, 128);
-    if (result != ESP_OK) {
-        ESP_LOGE(TAG, "httpd_ws_recv_frame failed with %d", result);
-        return result;
+static esp_err_t websocket_handle_text_frame(httpd_req_t* request, const httpd_ws_frame_t* frame) {
+    Message message;
+    cJSON* messageJson = message_from_json(&message, (const char*) frame->payload);
+    if (messageJson == NULL) {
+        ESP_LOGW(TAG, "No message found");
     }
-    ESP_LOGI(TAG, "Received[%d]: %s", frame.type, frame.payload);
-
-    if (frame.type == HTTPD_WS_TYPE_TEXT) {
-        Message message;
-        cJSON* messageJson = message_from_json(&message, (const char*) frame.payload);
-        if (messageJson == NULL) {
-            ESP_LOGW(TAG, "no message found");
+    esp_err_t result = ESP_FAIL;
+    if (messageJson != NULL) {
+        ESP_LOGI(TAG, "Received Message with type %s", message.type);
+        if (strcmp(message.type, INCOMING_MESSAGE_TYPE_GET_CONFIG) == 0) {
+            result = handle_get_config(request);
+        } else if (strcmp(message.type, INCOMING_MESSAGE_TYPE_PUT_CONFIG) == 0) {
+            result = handle_put_config(&message);
+        } else if (strcmp(message.type, INCOMING_MESSAGE_TYPE_FIRE_NOZZLE) == 0) {
+            result = handle_fire_nozzle(&message);
+        } else {
+            result = ESP_ERR_INVALID_RESPONSE;
         }
-        if (messageJson != NULL) {
-            ESP_LOGI(TAG, "received Message with type %s", message.type);
-            if (strcmp(message.type, INCOMING_MESSAGE_TYPE_GET_CONFIG) == 0) {
-                result = handle_get_config(request);
-            } else if (strcmp(message.type, INCOMING_MESSAGE_TYPE_PUT_CONFIG) == 0) {
-                result = handle_put_config(&message);
-            } else if (strcmp(message.type, INCOMING_MESSAGE_TYPE_FIRE_NOZZLE) == 0) {
-                result = handle_fire_nozzle(&message);
-            } else {
-            }
-            cJSON_Delete(messageJson);
-        }
+        cJSON_Delete(messageJson);
     } else {
-        ESP_LOGI(TAG, "received other");
+        result = ESP_ERR_INVALID_RESPONSE;
     }
+
     return result;
 }
+
+static esp_err_t websocket_handler(httpd_req_t* request) {
+    if (request->method == HTTP_GET) {
+        ESP_LOGI(TAG, "Handshake done, the new connection was opened");
+        return ESP_OK;
+    }
+
+    uint8_t* buffer = NULL;
+    httpd_ws_frame_t frame;
+    memset(&frame, 0, sizeof(httpd_ws_frame_t));
+    frame.type = HTTPD_WS_TYPE_TEXT;
+    // max_len 0 to get frame length
+    esp_err_t receiveResult = httpd_ws_recv_frame(request, &frame, 0);
+    if (receiveResult != ESP_OK) {
+        ESP_LOGE(TAG, "httpd_ws_recv_frame failed to get frame (error %d)", receiveResult);
+        return receiveResult;
+    }
+
+    ESP_LOGI(TAG, "Receiving frame (length %d, type %d)", frame.len, frame.type);
+
+    if (frame.len > 0) {
+        // frame.len + 1 is for NULL termination because we expect a string
+        buffer = calloc(1, frame.len + 1);
+        if (buffer == NULL) {
+            ESP_LOGE(TAG, "Failed to allocate buffer");
+            return ESP_ERR_NO_MEM;
+        }
+        frame.payload = buffer;
+        // TODO: Re-write so we can handle larger frames. Large frames will currently fail to allocate.
+        // max_len = frame.len to get the entire frame payload
+        receiveResult = httpd_ws_recv_frame(request, &frame, frame.len);
+        if (receiveResult != ESP_OK) {
+            ESP_LOGE(TAG, "httpd_ws_recv_frame failed (error %d)", receiveResult);
+            free(buffer);
+            return receiveResult;
+        }
+        ESP_LOGI(TAG, "Received: %s", frame.payload);
+    }
+
+    esp_err_t handleResult;
+    if (frame.type == HTTPD_WS_TYPE_TEXT) {
+        handleResult = websocket_handle_text_frame(request, &frame);
+    } else {
+        handleResult = ESP_FAIL;
+    }
+
+    if (handleResult != ESP_OK) {
+        ESP_LOGE(TAG, "Handling failed (error %d)", handleResult);
+    }
+
+    if (buffer != NULL) {
+        free(buffer);
+    }
+
+    return handleResult;
+}
+

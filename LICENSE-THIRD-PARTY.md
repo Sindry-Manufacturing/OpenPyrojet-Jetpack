@@ -59,3 +59,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+# WebSocket Echo Server Example
+
+The websocket server code is based on the related ESP-IDF SDK example.
+The original code can be found at `$IDF_PATH/examples/protocols/http_server/ws_echo_server`.
+
+```
+This example code is in the Public Domain (or CC0 licensed, at your option.)
+
+Unless required by applicable law or agreed to in writing, this
+software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied.
+```

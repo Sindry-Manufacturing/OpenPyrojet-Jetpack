@@ -2,7 +2,7 @@
 
 ## Preparing your environment
 
-Install [ESP-IDF SDK](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/).
+Install [ESP-IDF SDK v4.4](https://docs.espressif.com/projects/esp-idf/en/v4.4/esp32/get-started/index.html).
 
 ## Building and testing
 

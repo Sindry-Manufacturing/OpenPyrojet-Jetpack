@@ -1,4 +1,11 @@
+/**
+ * This code is based on:
+ *   $IDF_PATH/examples/protocols/http_server/ws_echo_server
+ */
 #include "websocket_server_start.h"
+
+#include <esp_event.h>
+#include <esp_netif.h> // for IP_EVENT etc.
 
 #include "websocket_server.h"
 #include "websocket_handler.h"
