@@ -8,7 +8,7 @@
 
 const char* TAG = "jetpack";
 
-uint64 gpio_pin_bit_mask(const Config* config) {
+static uint64 gpio_pin_bit_mask(const Config* config) {
     uint64 pinBitMask = 0ULL;
     for (int pinIndex = 0; pinIndex < config->nozzleCount; ++pinIndex) {
         uint8 pinNumber = config->nozzlePins[pinIndex];
@@ -18,7 +18,7 @@ uint64 gpio_pin_bit_mask(const Config* config) {
 }
 
 
-void jetpack_init_gpio(Config* config) {
+static void jetpack_init_gpio(Config* config) {
     uint64 pinBitMask = gpio_pin_bit_mask(config);
     gpio_config_t gpioConfig;
     gpioConfig.intr_type = GPIO_INTR_DISABLE;

@@ -1,16 +1,18 @@
 #include "config.h"
-#include "config_json.h"
+
 #include <esp_log.h>
 #include <string.h>
 #include <cJSON.h>
+
+#include "config_json.h"
 #include "file.h"
 
 static const char* TAG = "config";
 static const char* userConfigPath = "/config/user.json";
 static const char* defaultConfigPath = "/config/default.json";
 
+/// Application-wide configuration instance
 Config config;
-
 
 bool config_ensure_user_copy() {
     if (file_exists(userConfigPath)) { // file exists

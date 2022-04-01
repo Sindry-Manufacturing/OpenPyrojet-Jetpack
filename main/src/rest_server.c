@@ -5,7 +5,6 @@
 
 #include "rest_base.h"
 #include "rest_wildcard.h"
-#include "rest_system_info.h"
 #include "rest_wifi.h"
 
 esp_err_t rest_server_start(const char* basePath) {
@@ -21,7 +20,6 @@ esp_err_t rest_server_start(const char* basePath) {
     ESP_LOGI(REST_TAG, "starting");
     REST_CHECK(httpd_start(&server, &config) == ESP_OK, "Start server failed", err_start);
 
-    system_info_register_uri_handler(server, rest_context);
     register_wifi_uri_handler(server, rest_context);
     register_wildcard_uri_handler(server, rest_context);
 

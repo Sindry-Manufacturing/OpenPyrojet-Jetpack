@@ -5,8 +5,7 @@
 
 #include "config.h"
 
-static esp_err_t wifi_put_handler(httpd_req_t* request)
-{
+static esp_err_t wifi_put_handler(httpd_req_t* request) {
     const char* buffer = rest_read_buffer(request);
     if (buffer == NULL) {
         return ESP_FAIL;

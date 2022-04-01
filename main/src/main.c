@@ -15,10 +15,9 @@
 
 static const char* TAG = "application";
 
-esp_err_t nvs_flash_init_safely() {
+static esp_err_t nvs_flash_init_safely() {
     esp_err_t flashInitResult = nvs_flash_init();
-    if (flashInitResult == ESP_ERR_NVS_NO_FREE_PAGES || flashInitResult == ESP_ERR_NVS_NEW_VERSION_FOUND)
-    {
+    if (flashInitResult == ESP_ERR_NVS_NO_FREE_PAGES || flashInitResult == ESP_ERR_NVS_NEW_VERSION_FOUND) {
         ESP_ERROR_CHECK(nvs_flash_erase());
         flashInitResult = nvs_flash_init();
     }

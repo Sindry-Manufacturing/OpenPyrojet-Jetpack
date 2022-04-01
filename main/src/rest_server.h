@@ -3,6 +3,6 @@
 
 #include "esp_http_server.h"
 
-esp_err_t rest_server_start(const char *base_path);
+esp_err_t rest_server_start(const char* basePath);
 
 #endif //OPENPYROJET_REST_SERVER_H

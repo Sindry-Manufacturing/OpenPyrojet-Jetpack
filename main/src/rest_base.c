@@ -1,24 +1,24 @@
 #include "rest_base.h"
 
 char* rest_read_buffer(httpd_req_t* request) {
-    int total_len = request->content_len;
-    int cur_len = 0;
+    int contentLength = request->content_len;
+    int currentLength = 0;
     char* buffer = ((rest_server_context_t *)(request->user_ctx))->scratch;
     int received = 0;
-    if (total_len >= SCRATCH_BUFSIZE) {
-        /* Respond with 500 Internal Server Error */
+    if (contentLength >= SCRATCH_BUFSIZE) {
+        // Respond with 500 Internal Server Error
         httpd_resp_send_err(request, HTTPD_500_INTERNAL_SERVER_ERROR, "content too long");
         return NULL;
     }
-    while (cur_len < total_len) {
-        received = httpd_req_recv(request, buffer + cur_len, total_len);
+    while (currentLength < contentLength) {
+        received = httpd_req_recv(request, buffer + currentLength, contentLength);
         if (received <= 0) {
-            /* Respond with 500 Internal Server Error */
+            // Respond with 500 Internal Server Error
             httpd_resp_send_err(request, HTTPD_500_INTERNAL_SERVER_ERROR, "Failed to post control value");
             return NULL;
         }
-        cur_len += received;
+        currentLength += received;
     }
-    buffer[total_len] = '\0';
+    buffer[contentLength] = '\0';
     return buffer;
 }

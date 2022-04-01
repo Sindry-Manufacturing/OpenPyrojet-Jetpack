@@ -6,7 +6,7 @@
 
 static const char* TAG = "filesystem";
 
-esp_err_t fs_init_internal(esp_vfs_spiffs_conf_t* conf) {
+static esp_err_t fs_init_internal(esp_vfs_spiffs_conf_t* conf) {
     esp_err_t ret = esp_vfs_spiffs_register(conf);
     if (ret != ESP_OK) {
         if (ret == ESP_FAIL) {

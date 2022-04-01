@@ -22,8 +22,15 @@ typedef struct {
 
 extern Config config;
 
-// Needs to have have exactly NOZZLE_COUNT_MAX entries (see jetpack_main.h)
-#endif //OPENPYROJET_CONFIG_H
-
+/**
+ * Loads the user configuration from the filesystem.
+ * If a user configuration is not found, it is first copied from the default one.
+ */
 bool config_init();
+
+/**
+ * Save the configuration into the user configuration file.
+ */
 bool config_save(const Config* config);
+
+#endif //OPENPYROJET_CONFIG_H
