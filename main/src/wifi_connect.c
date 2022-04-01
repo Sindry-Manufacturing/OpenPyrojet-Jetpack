@@ -217,8 +217,8 @@ static void on_wifi_connect(
 
 static void wifi_config_copy(wifi_config_t* to, const WifiConfig* from) {
     memset(to, 0, sizeof(wifi_config_t));
-    strncpy((char*) to->sta.ssid, from->ssid, sizeof(to->sta.ssid)-1);
-    strncpy((char*) to->sta.password, from->password, sizeof(to->sta.password)-1);
+    strncpy((char*) to->sta.ssid, from->ssid, sizeof(to->sta.ssid));
+    strncpy((char*) to->sta.password, from->password, sizeof(to->sta.password));
     to->sta.scan_method = WIFI_ALL_CHANNEL_SCAN;
 }
 
