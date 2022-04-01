@@ -96,11 +96,11 @@ You can now use [Jetpack.js](https://github.com/Sindry-Manufacturing/OpenPyrojet
 
 ## FAQ
 
-- Q: The ESP32 is stuck "Connecting..." while trying to flash the firmware.
-- A: Some ESP32 devices have a different USB/UART implementation. To flash, press the "boot" or "reset" button every 1 to 2 seconds until firmware flashing continues.
+#### The ESP32 is stuck "Connecting..." while trying to flash the firmware.
+Some ESP32 devices have a different USB/UART implementation. To flash, press the "boot" or "reset" button every 1 to 2 seconds until firmware flashing continues.
 
-- Q: The WiFi configuration page says "Failed to save."
-- A: WiFi disconnected in the meanwhile. Reconnect WiFi to the "OpenPyrojet" network and press the Save button again.
+#### The WiFi configuration page says "Failed to save."
+WiFi disconnected in the meanwhile. Reconnect WiFi to the "OpenPyrojet" network and press the Save button again.
 
 ## License
 
