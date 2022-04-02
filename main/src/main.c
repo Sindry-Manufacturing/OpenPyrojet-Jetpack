@@ -24,6 +24,32 @@ static esp_err_t nvs_flash_init_safely() {
     return flashInitResult;
 }
 
+/**
+ * "Normal mode": Start wifi client and websocket server
+ */
+static void start_normal_mode() {
+    ESP_LOGI(TAG, "normal mode");
+    esp_ip4_addr_t noIp = { .addr = 0 };
+    display_show_wifi_normal_mode(noIp);
+    ESP_ERROR_CHECK(esp_netif_init());
+    ESP_ERROR_CHECK(esp_event_loop_create_default());
+    wifi_config(&(config.wifi));
+    ESP_ERROR_CHECK(wifi_connect());
+    ESP_ERROR_CHECK(websocket_server_start());
+}
+
+/**
+ * "Configuration mode": Start wifi Access Point and REST server
+ */
+static void start_config_mode() {
+    ESP_LOGI(TAG, "configuration mode");
+    esp_ip4_addr_t noIp = { .addr = 0 };
+    display_show_wifi_ap_mode(CONFIG_AP_WIFI_SSID, CONFIG_AP_WIFI_PASSWORD, noIp);
+    wifi_ap_init();
+    wifi_ap_start();
+    ESP_ERROR_CHECK(rest_server_start(MOUNT_POINT_WWW));
+}
+
 void app_main(void) {
     ESP_ERROR_CHECK(nvs_flash_init_safely());
     ESP_ERROR_CHECK(fs_init());
@@ -34,25 +60,9 @@ void app_main(void) {
         display_show_header();
     }
 
-    esp_ip4_addr_t noIp = {
-        .addr = 0
-    };
-
-    if (wifi_config_is_usable(&config.wifi)) {
-        // Start wifi client and websocket server ("normal mode")
-        ESP_LOGI(TAG, "normal mode");
-        display_show_wifi_normal_mode(noIp);
-        ESP_ERROR_CHECK(esp_netif_init());
-        ESP_ERROR_CHECK(esp_event_loop_create_default());
-        wifi_config(&(config.wifi));
-        ESP_ERROR_CHECK(wifi_connect());
-        ESP_ERROR_CHECK(websocket_server_start());
+   if (wifi_config_is_usable(&config.wifi)) {
+        start_normal_mode();
     } else {
-        // Start wifi Access Point and REST server ("configuration mode")
-        ESP_LOGI(TAG, "configuration mode");
-        display_show_wifi_ap_mode(CONFIG_AP_WIFI_SSID, CONFIG_AP_WIFI_PASSWORD, noIp);
-        wifi_ap_init();
-        wifi_ap_start();
-        ESP_ERROR_CHECK(rest_server_start(MOUNT_POINT_WWW));
+        start_config_mode();
     }
 }
