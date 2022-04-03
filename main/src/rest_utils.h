@@ -1,17 +1,17 @@
 /**
  * Shared code for all REST API implementations.
  */
-#ifndef OPENPYROJET_REST_BASE_H
-#define OPENPYROJET_REST_BASE_H
+#ifndef OPENPYROJET_REST_UTILS_H
+#define OPENPYROJET_REST_UTILS_H
 
-#include "esp_http_server.h"
-#include "esp_vfs.h"
+#include <esp_http_server.h>
+#include <esp_vfs.h>
 
-#define SCRATCH_BUFSIZE (10240)
+#define SCRATCH_BUFFER_SIZE (10240)
 
 typedef struct rest_server_context {
     char base_path[ESP_VFS_PATH_MAX + 1];
-    char scratch[SCRATCH_BUFSIZE];
+    char scratch[SCRATCH_BUFFER_SIZE];
 } rest_server_context_t;
 
 #define REST_TAG "rest"
@@ -28,4 +28,4 @@ typedef struct rest_server_context {
 
 char* rest_read_buffer(httpd_req_t* request);
 
-#endif //OPENPYROJET_REST_BASE_H
+#endif //OPENPYROJET_REST_UTILS_H

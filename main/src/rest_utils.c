@@ -1,11 +1,11 @@
-#include "rest_base.h"
+#include "rest_utils.h"
 
 char* rest_read_buffer(httpd_req_t* request) {
     int contentLength = request->content_len;
     int currentLength = 0;
     char* buffer = ((rest_server_context_t *)(request->user_ctx))->scratch;
     int received = 0;
-    if (contentLength >= SCRATCH_BUFSIZE) {
+    if (contentLength >= SCRATCH_BUFFER_SIZE) {
         // Respond with 500 Internal Server Error
         httpd_resp_send_err(request, HTTPD_500_INTERNAL_SERVER_ERROR, "content too long");
         return NULL;

@@ -3,7 +3,7 @@
 
 #include <esp_http_server.h>
 
-#include "rest_base.h"
+#include "rest_utils.h"
 
 void register_wifi_uri_handler(
     httpd_handle_t server,

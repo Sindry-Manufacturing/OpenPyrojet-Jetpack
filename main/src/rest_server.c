@@ -3,7 +3,7 @@
 #include <esp_log.h>
 #include <cJSON.h>
 
-#include "rest_base.h"
+#include "rest_utils.h"
 #include "rest_handler_wildcard.h"
 #include "rest_handler_wifi.h"
 

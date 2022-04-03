@@ -5,7 +5,7 @@
 #define OPENPYROJET_REST_HANDLER_WILDCARD_H
 
 #include "esp_http_server.h"
-#include "rest_base.h"
+#include "rest_utils.h"
 
 void register_wildcard_uri_handler(
     httpd_handle_t,

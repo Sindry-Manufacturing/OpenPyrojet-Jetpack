@@ -55,7 +55,7 @@ static esp_err_t rest_common_get_handler(httpd_req_t* request) {
     ssize_t read_bytes;
     do {
         /* Read file in chunks into the scratch buffer */
-        read_bytes = read(fd, chunk, SCRATCH_BUFSIZE);
+        read_bytes = read(fd, chunk, SCRATCH_BUFFER_SIZE);
         if (read_bytes == -1) {
             ESP_LOGE(REST_TAG, "Failed to read file : %s", filepath);
         } else if (read_bytes > 0) {
