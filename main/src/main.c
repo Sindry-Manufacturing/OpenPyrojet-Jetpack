@@ -30,8 +30,8 @@ static esp_err_t nvs_flash_init_safely() {
  */
 static void start_normal_mode() {
     ESP_LOGI(TAG, "normal mode (wifi client + websocket server)");
+    display_page_show(NORMAL_MODE);
     esp_ip4_addr_t noIp = { .addr = 0 };
-    display_show_wifi_normal_mode(noIp);
     ESP_ERROR_CHECK(esp_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());
     wifi_config(&(appState.config.wifi));
@@ -44,8 +44,8 @@ static void start_normal_mode() {
  */
 static void start_config_mode() {
     ESP_LOGI(TAG, "configuration mode (wifi AP + REST web server");
+    display_page_show(CONFIG_MODE);
     esp_ip4_addr_t noIp = { .addr = 0 };
-    display_show_wifi_ap_mode(CONFIG_AP_WIFI_SSID, CONFIG_AP_WIFI_PASSWORD, noIp);
     wifi_ap_init();
     wifi_ap_start();
     ESP_ERROR_CHECK(rest_server_start(MOUNT_POINT_WWW));
@@ -66,10 +66,8 @@ void app_main(void) {
     }
 
     if (wifi_config_is_usable(&appState.config.wifi)) {
-        display_page_show(NORMAL_MODE);
         start_normal_mode();
     } else {
-        display_page_show(CONFIG_MODE);
         start_config_mode();
     }
 }

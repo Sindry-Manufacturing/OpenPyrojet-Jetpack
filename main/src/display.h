@@ -3,10 +3,11 @@
 
 #include <esp_netif.h>
 
+#include "ssd1306/ssd1306.h"
 #include "display_config.h"
 
 void display_init(const DisplayConfig* config);
-void display_show_wifi_ap_mode();
-void display_show_wifi_normal_mode();
+bool display_is_initialized();
+SSD1306_t* display_get();
 
 #endif //OPENPYROJET_DISPLAY_H

@@ -3,7 +3,7 @@
 
 typedef enum DisplayPage {
     CONFIG_MODE = 0,
-    NORMAL_MODE = 1
+    NORMAL_MODE
 } DisplayState;
 
 /**
