@@ -7,8 +7,9 @@
 #include <esp_log.h>
 
 #include "message_json.h"
+#include "app_state.h"
 #include "config_json.h"
-#include "jetpack_main.h"
+#include "jetpack_io.h"
 
 static const char* TAG = "websocket-handler";
 
@@ -23,7 +24,7 @@ httpd_uri_t websocketHandlerUri = {
 };
 
 static esp_err_t handle_get_config(httpd_req_t* request) {
-    cJSON* dataJson = config_to_json_safe(&config);
+    cJSON* dataJson = config_to_json_safe(&appState.config);
     cJSON* messageJson = message_json_object("config", dataJson);
     char* messageJsonText = cJSON_PrintUnformatted(messageJson);
 
@@ -43,12 +44,12 @@ static esp_err_t handle_get_config(httpd_req_t* request) {
 }
 
 static esp_err_t handle_put_config(const Message* message) {
-    if (!config_from_json(&config, message->data)) {
+    if (!config_from_json(&appState.config, message->data)) {
         ESP_LOGW(TAG, "failed to parse incoming Message data as Config");
         return ESP_FAIL;
     }
 
-    if (!config_save(&config)) {
+    if (!config_save(&appState.config)) {
         ESP_LOGE(TAG, "failed to save config");
         return ESP_FAIL;
     }
@@ -63,7 +64,7 @@ static esp_err_t handle_fire_nozzle(const Message* message) {
     }
 
     long nozzleId = cJSON_GetNumberValue(message->data);
-    jetpack_fire((uint8)nozzleId);
+    jetpack_io_fire((uint8) nozzleId);
 
     return ESP_OK;
 }

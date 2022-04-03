@@ -17,7 +17,7 @@ typedef uint64_t uint64;
 typedef float float32;
 typedef double float64;
 
-#define mallocStruct(_type) (struct _type*)malloc(sizeof(struct _type))
-#define mallocStructArray(_type, _count) (struct _type*)malloc(sizeof(struct _type) * _count)
+#define malloc_struct(_type) (struct _type*)malloc(sizeof(struct _type))
+#define malloc_struct_array(_type, _count) (struct _type*)malloc(sizeof(struct _type) * _count)
 
 #endif // OPENPYROJET_TYPES_H

@@ -20,13 +20,11 @@ typedef struct {
     uint32 triggerDelay; // minimum delay between consecutive ejections in µs
 } Config;
 
-extern Config config;
-
 /**
  * Loads the user configuration from the filesystem.
  * If a user configuration is not found, it is first copied from the default one.
  */
-bool config_init();
+esp_err_t config_init(Config* config);
 
 /**
  * Save the configuration into the user configuration file.

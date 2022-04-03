@@ -4,8 +4,8 @@
 #include <cJSON.h>
 
 #include "rest_base.h"
-#include "rest_wildcard.h"
-#include "rest_wifi.h"
+#include "rest_handler_wildcard.h"
+#include "rest_handler_wifi.h"
 
 esp_err_t rest_server_start(const char* basePath) {
     REST_CHECK(basePath, "wrong base path", err);

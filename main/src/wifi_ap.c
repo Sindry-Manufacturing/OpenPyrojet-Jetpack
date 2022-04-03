@@ -15,7 +15,7 @@
 #include <esp_log.h>
 #include <esp_netif.h>
 
-#include "display.h"
+#include "app_state.h"
 
 #define CONFIG_AP_WIFI_CONNECTION_LIMIT 4
 
@@ -96,7 +96,8 @@ bool wifi_ap_start() {
         if (strcmp(esp_netif_get_desc(netif), "ap") == 0) {
             ESP_ERROR_CHECK(esp_netif_get_ip_info(netif, &ip));
             ESP_LOGI(TAG, "Access point IPv4 address: " IPSTR, IP2STR(&ip.ip));
-            display_show_wifi_ap_mode(CONFIG_AP_WIFI_SSID, CONFIG_AP_WIFI_PASSWORD, ip.ip);
+            appState.ip = ip.ip;
+            app_state_changed(IP);
 #ifdef WIFI_USE_IPV6
             esp_ip6_addr_t ip6[MAX_IP6_ADDRS_PER_NETIF];
             int ip6_addrs = esp_netif_get_all_ip6(netif, ip6);

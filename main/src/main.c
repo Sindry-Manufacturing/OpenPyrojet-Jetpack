@@ -6,12 +6,13 @@
 #include "sdkconfig.h"
 #include "wifi_connect.h"
 #include "wifi_ap.h"
-#include "config.h"
-#include "jetpack_main.h"
+#include "app_state.h"
+#include "jetpack_io.h"
 #include "fs_init.h"
 #include "websocket_server_start.h"
 #include "rest_server.h"
 #include "display.h"
+#include "display_page.h"
 
 static const char* TAG = "application";
 
@@ -28,12 +29,12 @@ static esp_err_t nvs_flash_init_safely() {
  * "Normal mode": Start wifi client and websocket server
  */
 static void start_normal_mode() {
-    ESP_LOGI(TAG, "normal mode");
+    ESP_LOGI(TAG, "normal mode (wifi client + websocket server)");
     esp_ip4_addr_t noIp = { .addr = 0 };
     display_show_wifi_normal_mode(noIp);
     ESP_ERROR_CHECK(esp_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());
-    wifi_config(&(config.wifi));
+    wifi_config(&(appState.config.wifi));
     ESP_ERROR_CHECK(wifi_connect());
     ESP_ERROR_CHECK(websocket_server_start());
 }
@@ -42,7 +43,7 @@ static void start_normal_mode() {
  * "Configuration mode": Start wifi Access Point and REST server
  */
 static void start_config_mode() {
-    ESP_LOGI(TAG, "configuration mode");
+    ESP_LOGI(TAG, "configuration mode (wifi AP + REST web server");
     esp_ip4_addr_t noIp = { .addr = 0 };
     display_show_wifi_ap_mode(CONFIG_AP_WIFI_SSID, CONFIG_AP_WIFI_PASSWORD, noIp);
     wifi_ap_init();
@@ -53,16 +54,22 @@ static void start_config_mode() {
 void app_main(void) {
     ESP_ERROR_CHECK(nvs_flash_init_safely());
     ESP_ERROR_CHECK(fs_init());
-    ESP_ERROR_CHECK(jetpack_init()); // Config and IO
+    ESP_ERROR_CHECK(config_init(&appState.config));
 
-    if (display_config_is_usable(&config.display)) {
-        display_init(&config.display);
-        display_show_header();
+    esp_err_t ioSuccess = jetpack_io_init(&appState.config);
+    if (ioSuccess != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to initialize GPIO. Make sure your pin configuration is correct.");
     }
 
-   if (wifi_config_is_usable(&config.wifi)) {
+    if (display_config_is_usable(&appState.config.display)) {
+        display_init(&appState.config.display);
+    }
+
+    if (wifi_config_is_usable(&appState.config.wifi)) {
+        display_page_show(NORMAL_MODE);
         start_normal_mode();
     } else {
+        display_page_show(CONFIG_MODE);
         start_config_mode();
     }
 }

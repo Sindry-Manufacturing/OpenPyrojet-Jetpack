@@ -18,5 +18,4 @@ typedef struct {
     cJSON* data;
 } Message;
 
-
 #endif //OPENPYROJET_MESSAGE_H

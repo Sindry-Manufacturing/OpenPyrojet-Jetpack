@@ -1,9 +1,9 @@
-#include "rest_wifi.h"
+#include "rest_handler_wifi.h"
 
 #include <cJSON.h>
 #include <esp_log.h>
 
-#include "config.h"
+#include "app_state.h"
 
 static esp_err_t wifi_put_handler(httpd_req_t* request) {
     const char* buffer = rest_read_buffer(request);
@@ -16,13 +16,13 @@ static esp_err_t wifi_put_handler(httpd_req_t* request) {
     const char* wifiPassword = cJSON_GetObjectItem(root, "password")->valuestring;
     unsigned long wifiPasswordLength = strlen(wifiPassword);
 
-    bool isValid = wifiSsidLength < sizeof(config.wifi.ssid) &&
-        wifiPasswordLength < sizeof(config.wifi.password);
+    bool isValid = wifiSsidLength < sizeof(appState.config.wifi.ssid) &&
+        wifiPasswordLength < sizeof(appState.config.wifi.password);
 
     if (isValid) {
-        strcpy((char*)config.wifi.ssid, wifiSsid);
-        strcpy((char*)config.wifi.password, wifiPassword);
-        config_save(&config);
+        strcpy((char*)appState.config.wifi.ssid, wifiSsid);
+        strcpy((char*)appState.config.wifi.password, wifiPassword);
+        config_save(&appState.config);
         ESP_LOGI(REST_TAG, "wifi config: SSID %s, password (%d characters)", wifiSsid, strlen(wifiPassword));
     } else {
         ESP_LOGE(REST_TAG, "wifi SSID or password too long");

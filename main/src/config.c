@@ -11,9 +11,6 @@ static const char* TAG = "config";
 static const char* userConfigPath = "/config/user.json";
 static const char* defaultConfigPath = "/config/default.json";
 
-/// Application-wide configuration instance
-Config config;
-
 bool config_ensure_user_copy() {
     if (file_exists(userConfigPath)) { // file exists
         ESP_LOGI(TAG, "using existing %s", userConfigPath);
@@ -23,10 +20,10 @@ bool config_ensure_user_copy() {
     }
 }
 
-bool config_init() {
+esp_err_t config_init(Config* config) {
     if (!config_ensure_user_copy()) {
         ESP_LOGE(TAG, "failed to ensure existence of %s", userConfigPath);
-        return false;
+        return ESP_FAIL;
     }
 
     const char* userConfigPath = "/config/user.json";
@@ -51,11 +48,17 @@ bool config_init() {
         return ESP_FAIL;
     }
 
-    ESP_LOGI(TAG, "loaded");
+    ESP_LOGI(TAG, "loaded from file");
     buffer[bytesRead] = '\0';
     fclose(file);
 
-    return config_from_json_text(&config, buffer);
+    if (config_from_json_text(config, buffer)) {
+        ESP_LOGI(TAG, "json parsed");
+        return ESP_OK;
+    } else {
+        ESP_LOGI(TAG, "json parsing failed");
+        return ESP_FAIL;
+    }
 }
 
 bool config_save(const Config* config) {

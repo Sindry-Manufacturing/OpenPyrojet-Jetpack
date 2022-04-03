@@ -1,4 +1,5 @@
 #include <string.h>
+
 #include "wifi_connect.h"
 #include "sdkconfig.h"
 #include "esp_event.h"
@@ -6,19 +7,17 @@
 #include "esp_wifi_default.h"
 #include "esp_log.h"
 #include "esp_netif.h"
-#include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"
 #include "lwip/err.h"
+
+#include "wifi_config.h"
+#include "app_state.h"
 
 #ifdef WIFI_USE_IPV6
 #include "freertos/task.h"
 #include "freertos/event_groups.h"
 #include "lwip/sys.h"
 #endif
-
-#include "wifi_config.h"
-
-#include "display.h"
 
 #ifdef WIFI_USE_IPV6
 #define MAX_IP6_ADDRS_PER_NETIF (5)
@@ -163,7 +162,9 @@ esp_err_t wifi_connect(void) {
             ESP_ERROR_CHECK(esp_netif_get_ip_info(netif, &ip));
             ESP_LOGI(TAG, "- IPv4 address: "
             IPSTR, IP2STR(&ip.ip));
-            display_show_wifi_normal_mode(ip.ip);
+
+            appState.ip = ip.ip;
+            app_state_changed(IP);
 #ifdef WIFI_USE_IPV6
             esp_ip6_addr_t ip6[MAX_IP6_ADDRS_PER_NETIF];
             int ip6_addrs = esp_netif_get_all_ip6(netif, ip6);

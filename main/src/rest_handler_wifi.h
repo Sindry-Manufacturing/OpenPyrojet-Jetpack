@@ -1,5 +1,5 @@
-#ifndef OPENPYROJET_REST_WIFI_H
-#define OPENPYROJET_REST_WIFI_H
+#ifndef OPENPYROJET_REST_HANDLER_WIFI_H
+#define OPENPYROJET_REST_HANDLER_WIFI_H
 
 #include <esp_http_server.h>
 
@@ -10,4 +10,4 @@ void register_wifi_uri_handler(
     rest_server_context_t* rest_context
 );
 
-#endif //OPENPYROJET_REST_WIFI_H
+#endif //OPENPYROJET_REST_HANDLER_WIFI_H
