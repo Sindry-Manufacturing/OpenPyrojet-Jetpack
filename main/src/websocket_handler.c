@@ -54,6 +54,9 @@ static esp_err_t handle_put_config(const Message* message) {
         return ESP_FAIL;
     }
 
+    // TODO: check if the pins actually changed
+    app_state_changed(CONFIG_PINS);
+
     return ESP_OK;
 }
 
