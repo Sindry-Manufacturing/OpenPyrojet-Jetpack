@@ -3,7 +3,7 @@
 #include "display_page.h"
 #include "jetpack_io.h"
 
-void app_state_changed(enum AppStateChange which) {
+void app_state_changed(AppStateChange which) {
     switch (which) {
         case CONFIG_PINS:
             jetpack_io_init(&appState.config);

@@ -10,11 +10,11 @@ struct AppState {
     esp_ip4_addr_t ip;
 } appState;
 
-enum AppStateChange {
+typedef enum {
     CONFIG_PINS,
     IP
-};
+} AppStateChange;
 
-void app_state_changed(enum AppStateChange which);
+void app_state_changed(AppStateChange which);
 
 #endif //OPENPYROJET_APP_STATE_H

@@ -7,11 +7,11 @@
  */
 typedef void (*state_action)();
 
-struct StateMachine;
+typedef struct StateMachine StateMachine;
 
-struct StateMachine* state_machine_create(const char* name, int stateCount);
+StateMachine* state_machine_create(const char* name, int stateCount);
 
-void state_machine_delete(struct StateMachine* stateMachine);
+void state_machine_delete(StateMachine* stateMachine);
 
 /**
  * @param machine the state machine
@@ -21,21 +21,21 @@ void state_machine_delete(struct StateMachine* stateMachine);
  * @param data (nullable) state data
  * @return the screen id
  */
-int state_machine_add_state(struct StateMachine* machine, const char* name, state_action onEnter, state_action onUpdate, state_action onExit);
+int state_machine_add_state(StateMachine* machine, const char* name, state_action onEnter, state_action onUpdate, state_action onExit);
 
 /**
  * Transition to a new state. Deactivates the previous state if applicable.
  * @param machine the state machine
  * @param id the state id
  */
-void state_machine_enter(struct StateMachine* machine, int id);
+void state_machine_enter(StateMachine* machine, int id);
 
 /**
  * If the specified state is active: send an update signal to trigger the update callback.
  * @param machine the state machine
  * @param id the screen id
  */
-void state_machine_update(struct StateMachine* machine, int id);
+void state_machine_update(StateMachine* machine, int id);
 
 
 #endif //OPENPYROJET_STATE_MACHINE_H

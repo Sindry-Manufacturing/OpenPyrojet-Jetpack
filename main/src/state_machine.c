@@ -4,7 +4,7 @@
 
 #include "types.h"
 
-typedef struct State {
+typedef struct {
     const char* name;
     state_action onEnter;
     state_action onUpdate;
@@ -13,34 +13,34 @@ typedef struct State {
 
 static const char* TAG = "state-machine";
 
-typedef struct StateMachine {
+struct StateMachine {
     const char* name;
     int registrationIndex;
     int activeState;
     int stateCount;
     State* states;
-} StateMachine;
+};
 
 static void state_machine_no_action() {
     // NO-OP
 }
 
-struct StateMachine* state_machine_create(const char* name, int stateCount) {
-    struct StateMachine* machine = malloc_struct(StateMachine);
+StateMachine* state_machine_create(const char* name, int stateCount) {
+    StateMachine* machine = malloc_one(struct StateMachine);
     machine->name = name;
     machine->stateCount = stateCount;
     machine->registrationIndex = 0;
     machine->activeState = -1;
-    machine->states = malloc_struct_array(State, stateCount);
+    machine->states = malloc_array(State, stateCount);
     return machine;
 }
 
-void state_machine_delete(struct StateMachine* machine) {
+void state_machine_delete(StateMachine* machine) {
     free(machine->states);
     free(machine);
 }
 
-int state_machine_add_state(struct StateMachine* machine, const char* name, state_action onEnter, state_action onUpdate, state_action onExit) {
+int state_machine_add_state(StateMachine* machine, const char* name, state_action onEnter, state_action onUpdate, state_action onExit) {
     if (machine->registrationIndex == machine->stateCount) {
         ESP_LOGE(TAG, "[%s] reached state limit of %d", machine->name, machine->stateCount);
         return -1;
@@ -49,7 +49,7 @@ int state_machine_add_state(struct StateMachine* machine, const char* name, stat
     ESP_LOGI(TAG, "[%s] add %s (id %d)", machine->name, name, machine->registrationIndex);
 
     int id = machine->registrationIndex;
-    struct State* state = &machine->states[id];
+    State* state = &machine->states[id];
     state->name = name;
 
     if (onEnter != NULL) {
@@ -74,24 +74,24 @@ int state_machine_add_state(struct StateMachine* machine, const char* name, stat
     return id;
 }
 
-void state_machine_enter(struct StateMachine* machine, int id) {
+void state_machine_enter(StateMachine* machine, int id) {
     if (id == machine->activeState) {
         // Already in state, so we just notify it to update
-        struct State* state = &machine->states[id];
+        State* state = &machine->states[id];
         ESP_LOGI(TAG, "[%s] onUpdate %s", machine->name, state->name);
         state->onUpdate();
     } else {
         // Exit the last state
         int activeState = machine->activeState;
         if (activeState != -1) {
-            struct State* oldState = &machine->states[activeState];
+            State* oldState = &machine->states[activeState];
             ESP_LOGI(TAG, "[%s] onExit %s", machine->name, oldState->name);
             oldState->onExit();
         }
 
         // Enter new state
         machine->activeState = id;
-        struct State* state = &machine->states[id];
+        State* state = &machine->states[id];
         ESP_LOGI(TAG, "[%s] onEnter %s", machine->name, state->name);
         state->onEnter();
         ESP_LOGI(TAG, "[%s] onUpdate %s", machine->name, state->name);
@@ -99,9 +99,9 @@ void state_machine_enter(struct StateMachine* machine, int id) {
     }
 }
 
-void state_machine_update(struct StateMachine* machine, int id) {
+void state_machine_update(StateMachine* machine, int id) {
     if (machine->activeState == id) {
-        struct State* state = &machine->states[id];
+        State* state = &machine->states[id];
         ESP_LOGI(TAG, "[%s] onUpdate %s", machine->name, state->name);
         state->onUpdate();
     }

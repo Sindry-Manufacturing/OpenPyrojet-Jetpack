@@ -41,7 +41,7 @@ static void display_page_ensure_initialized() {
     );
 }
 
-void display_page_show(enum DisplayPage state) {
+void display_page_show(DisplayPage state) {
     display_page_ensure_initialized();
 
     switch (state) {
@@ -54,7 +54,7 @@ void display_page_show(enum DisplayPage state) {
     }
 }
 
-void display_page_notify_changed(enum DisplayPage state) {
+void display_page_notify_changed(DisplayPage state) {
     display_page_ensure_initialized();
 
     switch (state) {
