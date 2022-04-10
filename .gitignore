@@ -13,4 +13,8 @@ sdkconfig
 build/
 venv/
 
+sdkconfig.ci
+sdkconfig.defaults
+sdkconfig.old
+
 main/config/user.json
