@@ -9,7 +9,7 @@ bool wifi_config_from_json(const cJSON* json, WifiConfig* wifiConfig) {
     memset(wifiConfig->ssid, 0, sizeof(wifiConfig->ssid));
     memset(wifiConfig->password, 0, sizeof(wifiConfig->password));
 
-   const cJSON* ssidJson = cJSON_GetObjectItemCaseSensitive(json, "ssid");
+    const cJSON* ssidJson = cJSON_GetObjectItemCaseSensitive(json, "ssid");
     if (cJSON_IsNull(ssidJson) || !cJSON_IsString(ssidJson)) {
         ESP_LOGE(TAG, "wifi ssid is not a string");
         return false;
@@ -24,10 +24,19 @@ bool wifi_config_from_json(const cJSON* json, WifiConfig* wifiConfig) {
     const char* ssid = cJSON_GetStringValue(ssidJson);
     const char* password = cJSON_GetStringValue(passwordJson);
 
-    strcpy(wifiConfig->ssid, ssid);
-    strcpy(wifiConfig->password, password);
+    size_t ssidLength = strlen(ssid);
+    size_t passwordLength = strlen(password);
+    bool isValid = ssidLength < sizeof(wifiConfig->ssid) &&
+        passwordLength < sizeof(wifiConfig->password);
 
-    return true;
+    if (isValid) {
+        strcpy(wifiConfig->ssid, ssid);
+        strcpy(wifiConfig->password, password);
+        return true;
+    } else {
+        ESP_LOGE(TAG, "wifi password and/or ssid are too long");
+        return false;
+    }
 }
 
 static void wifi_config_to_json_internal(cJSON* json, const WifiConfig* config, bool removeRiskItems) {

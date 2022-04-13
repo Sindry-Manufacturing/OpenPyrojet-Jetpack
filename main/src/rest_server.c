@@ -4,8 +4,9 @@
 #include <cJSON.h>
 
 #include "rest_utils.h"
+#include "rest_handler_config.h"
+#include "rest_handler_reboot.h"
 #include "rest_handler_wildcard.h"
-#include "rest_handler_wifi.h"
 
 esp_err_t rest_server_start(const char* basePath) {
     REST_CHECK(basePath, "wrong base path", err);
@@ -20,7 +21,8 @@ esp_err_t rest_server_start(const char* basePath) {
     ESP_LOGI(REST_TAG, "starting");
     REST_CHECK(httpd_start(&server, &config) == ESP_OK, "Start server failed", err_start);
 
-    register_wifi_uri_handler(server, rest_context);
+    register_config_uri_handler(server, rest_context);
+    register_reboot_uri_handler(server, rest_context);
     register_wildcard_uri_handler(server, rest_context);
 
     ESP_LOGI(REST_TAG, "ready");

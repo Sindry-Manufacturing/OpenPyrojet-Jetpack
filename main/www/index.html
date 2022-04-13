@@ -70,17 +70,26 @@ $(document).ready(function() {
             return;
         }
 
-        let wifiData = {
-            'ssid': wifiSsid,
-            'password': wifiPassword
+        let config = {
+            wifi: {
+                'ssid': wifiSsid,
+                'password': wifiPassword
+            }
         };
-        let wifiPostBody = JSON.stringify(wifiData);
-        $.ajax('/api/wifi', {
-            data: wifiPostBody,
+        let configPostBody = JSON.stringify(config);
+        $.ajax('/api/config', {
+            data: configPostBody,
             contentType: 'application/json',
             type: 'PUT'
         }).done(function () {
-            alert("Configuration saved. Please reboot the ESP32.");
+            if (confirm("Configuration saved. Press OK to reboot the ESP32.")) {
+                $.ajax('/api/reboot', {
+                    contentType: 'application/json',
+                    type: 'POST'
+                }).fail(function () {
+                    alert('Failed to reboot ESP32.');
+                })
+            }
         }).fail(function () {
             alert("Failed to save");
         });
