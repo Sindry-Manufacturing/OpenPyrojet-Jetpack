@@ -1,5 +1,7 @@
 #include "rest_handler_reboot.h"
 
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
 #include <esp_log.h>
 
 static const char* TAG = "rest-handler-reboot";
@@ -9,6 +11,7 @@ static void reboot_task(void* parameter) {
     // Delay for the REST request finish
     vTaskDelay(500L / portTICK_PERIOD_MS);
     esp_restart();
+    vTaskDelete(NULL); // never gets executed
 }
 
 static esp_err_t reboot_post_handler(httpd_req_t* request) {
