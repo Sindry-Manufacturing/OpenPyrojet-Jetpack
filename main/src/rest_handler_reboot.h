@@ -7,7 +7,7 @@
 
 void register_reboot_uri_handler(
     httpd_handle_t server,
-    rest_server_context_t* rest_context
+    rest_server_context_t* restContext
 );
 
 #endif //OPENPYROJET_REST_HANDLER_REBOOT_H

@@ -33,13 +33,13 @@ static esp_err_t reboot_post_handler(httpd_req_t* request) {
 
 void register_reboot_uri_handler(
     httpd_handle_t server,
-    rest_server_context_t* rest_context
+    rest_server_context_t* restContext
 ) {
-    httpd_uri_t reboot_post_uri = {
+    httpd_uri_t rebootPostUri = {
         .uri = "/api/reboot",
         .method = HTTP_POST,
         .handler = reboot_post_handler,
-        .user_ctx = rest_context
+        .user_ctx = restContext
     };
-    httpd_register_uri_handler(server, &reboot_post_uri);
+    httpd_register_uri_handler(server, &rebootPostUri);
 }
