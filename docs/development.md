@@ -38,6 +38,14 @@ idf.py -p $DEVICE build flash monitor
 
 You can exit the monitor screen by pressing `CTRL` + `]`.
 
+### Stacktrace analysis
+
+```bash
+xtensa-esp32-elf-addr2line -pfiaC -e build/OpenPyrojet.elf {ADDRESSES}
+```
+
+Where `{ADDRESSES}` is the series of hex addresses of the stack trace, after "Backtrace:" in the log.
+
 ## Configure the firmware project
 
 **NOTE: `./sdkconfig` is checked and is configured correctly.

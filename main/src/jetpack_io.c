@@ -40,7 +40,7 @@ void jetpack_io_fire(uint8 nozzleId) {
         uint8 nozzlePin = appState.config.nozzlePins[nozzleId];
         ESP_LOGI(TAG, "Firing nozzle %d at pin %d for %d µs", nozzleId, nozzlePin, appState.config.heatingDuration);
         gpio_set_level(nozzlePin, 1);
-        usleep(appState.config.heatingDuration);
+        ets_delay_us(appState.config.heatingDuration);
         gpio_set_level(nozzlePin, 0);
     }  else {
         ESP_LOGE(TAG, "Invalid nozzle index: %d (max %d)", nozzleId, maxId);
