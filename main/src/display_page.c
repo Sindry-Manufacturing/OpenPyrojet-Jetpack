@@ -72,7 +72,7 @@ void display_page_notify_changed(DisplayPage state) {
 
 static void ip_to_string(esp_ip4_addr_t ip, char* target) {
     snprintf(target, 128, "%hu.%hu.%hu.%hu",
-             esp_ip4_addr1_16(&ip), \
+        esp_ip4_addr1_16(&ip), \
         esp_ip4_addr2_16(&ip), \
         esp_ip4_addr3_16(&ip), \
         esp_ip4_addr4_16(&ip)
