@@ -6,7 +6,6 @@
 typedef struct {
     int pinScl;
     int pinSda;
-    int pinReset;
     int pixelWidth;
     int pixelHeight;
 } DisplayConfig;

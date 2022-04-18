@@ -38,10 +38,9 @@ bool config_from_json(Config* config, const cJSON* json) {
         } else {
             ESP_LOGI(
                 TAG,
-                "display: pinSda %d, pinScl %d, pinReset %d, pixelWidth %d, pixelHeight %d",
+                "display: pinSda %d, pinScl %d, pixelWidth %d, pixelHeight %d",
                 config->display.pinSda,
                 config->display.pinScl,
-                config->display.pinReset,
                 config->display.pixelWidth,
                 config->display.pixelHeight
             );

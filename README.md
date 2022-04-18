@@ -105,3 +105,5 @@ WiFi disconnected in the meanwhile. Reconnect WiFi to the "OpenPyrojet" network 
 ## License
 
 [GNU General Public License Version 3](LICENSE.md)
+
+Third party licenses can be found [here](docs/licenses-third-party.md).

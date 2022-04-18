@@ -3,6 +3,7 @@
 #include "state_machine.h"
 #include "display.h"
 #include "app_state.h"
+#include "wifi_ap.h"
 
 #include <string.h>
 #include <stddef.h>
@@ -78,9 +79,8 @@ static void ip_to_string(esp_ip4_addr_t ip, char* target) {
     );
 }
 
-static void display_show_header(SSD1306_t* display) {
-    ssd1306_clear_screen(display, false);
-    ssd1306_display_text(display, 0, "  OpenPyrojet   ", 16, true);
+static void display_show_header(u8g2_t* display) {
+    u8g2_DrawStr(display, 30, 8, "OpenPyrojet");
 }
 
 void display_show_wifi_ap_mode() {
@@ -88,22 +88,33 @@ void display_show_wifi_ap_mode() {
         return;
     }
 
-    SSD1306_t* display = display_get();
+    u8g2_t* display = display_get();
+
+    u8g2_SetPowerSave(display, 0);
+    u8g2_ClearBuffer(display);
+
     display_show_header(display);
 
-    const char* wifiSsid = appState.config.wifi.ssid;
-    const char* wifiPassword = appState.config.wifi.password;
-    ssd1306_display_text(display, 1, "Wifi SSID:", 10, false);
-    ssd1306_display_text_with_offset(display, 2, wifiSsid, strlen(wifiSsid), false, 8);
-    ssd1306_display_text(display, 3, "Wifi password:", 14, false);
-    ssd1306_display_text_with_offset(display, 4, wifiPassword, strlen(wifiPassword), false, 8);
-    ssd1306_display_text(display, 5, "http://", 7, false);
+    int lineHeight = 9;
+    int currentY = 8 + lineHeight;
+    u8g2_DrawStr(display, 0, currentY, "Wifi SSID:");
+    currentY+=lineHeight;
+    u8g2_DrawStr(display, 15, currentY, wifi_ap_get_ssid());
+    currentY+=lineHeight;
+    u8g2_DrawStr(display, 0, currentY, "Wifi Password:");
+    currentY+=lineHeight;
+    u8g2_DrawStr(display, 15, currentY, wifi_ap_get_password());
+    currentY+=lineHeight;
 
     if (appState.ip.addr != 0) {
         char ipString[128];
         ip_to_string(appState.ip, ipString);
-        ssd1306_display_text_with_offset(display, 6, ipString, strlen(ipString), false, 8);
+        u8g2_DrawStr(display, 0, currentY, "Web browser:");
+        currentY+=lineHeight;
+        u8g2_DrawStr(display, 0, currentY, "http://");
+        u8g2_DrawStr(display, 42, currentY, ipString);
     }
+    u8g2_SendBuffer(display);
 }
 
 void display_show_wifi_normal_mode() {
@@ -111,19 +122,24 @@ void display_show_wifi_normal_mode() {
         return;
     }
 
-    SSD1306_t* display = display_get();
+    u8g2_t* display = display_get();
+
+    u8g2_SetPowerSave(display, 0);
+    u8g2_ClearBuffer(display);
 
     display_show_header(display);
 
-    ssd1306_display_text(display, 2, "IP:", 3, false);
+    int lineHeight = 9;
+    int currentY = 8 + (lineHeight * 2);
+    u8g2_DrawStr(display, 0, currentY, "IP:");
     if (appState.ip.addr != 0) {
         char target[128];
         ip_to_string(appState.ip, target);
-        ssd1306_clear_line(display, 3, false);
-        ssd1306_display_text_with_offset(display, 3, target, strlen(target), false, 8);
+        u8g2_DrawStr(display, 20, currentY, target);
     } else {
-        ssd1306_display_text(display, 3, "[Connecting ...]", 16, false);
+        u8g2_DrawStr(display, 20, currentY, "[Connecting ...]");
     }
+    u8g2_SendBuffer(display);
 }
 
 // endregion Page implementations

@@ -30,6 +30,14 @@ static uint8_t random_wifi_channel() {
     return (abs(rand()) % 13) + 1;
 }
 
+const char* wifi_ap_get_ssid() {
+    return CONFIG_AP_WIFI_SSID;
+}
+
+const char* wifi_ap_get_password() {
+    return CONFIG_AP_WIFI_PASSWORD;
+}
+
 static void event_handler(
     void* arg,
     esp_event_base_t eventBase,
@@ -67,13 +75,13 @@ void wifi_ap_init() {
 
 bool wifi_ap_start() {
     wifi_config_t wifiConfig = { 0 };
-    strcpy((char*)wifiConfig.ap.ssid, CONFIG_AP_WIFI_SSID);
-    strcpy((char*)wifiConfig.ap.password, CONFIG_AP_WIFI_PASSWORD);
+    strcpy((char*)wifiConfig.ap.ssid, wifi_ap_get_ssid());
+    strcpy((char*)wifiConfig.ap.password, wifi_ap_get_password());
     wifiConfig.ap.authmode = WIFI_AUTH_WPA_WPA2_PSK;
-    wifiConfig.ap.ssid_len = strlen(CONFIG_AP_WIFI_SSID);
+    wifiConfig.ap.ssid_len = strlen(wifi_ap_get_ssid());
     wifiConfig.ap.max_connection = CONFIG_AP_WIFI_CONNECTION_LIMIT;
     wifiConfig.ap.channel = random_wifi_channel();
-    if (strlen(CONFIG_AP_WIFI_PASSWORD) == 0) {
+    if (strlen(wifi_ap_get_password()) == 0) {
         wifiConfig.ap.authmode = WIFI_AUTH_OPEN;
     }
 

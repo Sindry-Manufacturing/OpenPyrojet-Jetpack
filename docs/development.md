@@ -1,5 +1,13 @@
 # Development
 
+## Checking out this repository
+
+Make sure you clone with submodules:
+
+```bash
+git clone --recurse-submodules {URL}
+```
+
 ## Preparing your environment
 
 Install [ESP-IDF SDK v4.4](https://docs.espressif.com/projects/esp-idf/en/v4.4/esp32/get-started/index.html).

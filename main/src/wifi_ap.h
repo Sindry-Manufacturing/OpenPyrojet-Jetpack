@@ -9,4 +9,7 @@
 void wifi_ap_init();
 bool wifi_ap_start();
 
+const char* wifi_ap_get_ssid();
+const char* wifi_ap_get_password();
+
 #endif //OPENPYROJET_WIFI_AP_H

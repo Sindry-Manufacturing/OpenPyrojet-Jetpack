@@ -17,6 +17,7 @@ idf_component_register(SRCS "src/app_state.c"
     "src/rest_server.c"
     "src/rest_utils.c"
     "src/state_machine.c"
+    "src/u8g2_esp32_hal.c"
     "src/websocket_server.c"
     "src/websocket_server_start.c"
     "src/websocket_handler.c"
@@ -24,9 +25,6 @@ idf_component_register(SRCS "src/app_state.c"
     "src/wifi_config.c"
     "src/wifi_config_json.c"
     "src/wifi_connect.c"
-    "src/ssd1306/ssd1306.c"
-    "src/ssd1306/ssd1306_i2c.c"
-    "src/ssd1306/ssd1306_spi.c"
     INCLUDE_DIRS ".")
 
 set(WEB_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/www")
