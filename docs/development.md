@@ -86,3 +86,9 @@ In the `Example Configuration` menu:
 * Choose the deploy mode in `Website deploy mode`, currently we support deploy website to host PC, SD card and SPI Nor flash.
   * If we choose to `Deploy website to host (JTAG is needed)`, then we also need to specify the full path of the website in `Host path to mount (e.g. absolute path to web dist directory)`.
 * Set the mount point of the website in `Website mount point in VFS` option, the default value is `/www`.
+
+## Skipping the WiFi setup
+
+After each flash, the ESP32 starts the Access Point to configure WiFi. This makes development slow.
+To avoid it, open folder `main/config/` and copy `default.json` into a new file named `user.json`.
+Fill in the WiFi SSID & password in `user.json`.
