@@ -8,17 +8,17 @@
 
 static const char* TAG = "jetpack";
 
-static uint64 gpio_pin_bit_mask(const Config* config) {
-    uint64 pinBitMask = 0ULL;
+static uint64_t gpio_pin_bit_mask(const Config* config) {
+    uint64_t pinBitMask = 0ULL;
     for (int pinIndex = 0; pinIndex < config->nozzleCount; ++pinIndex) {
-        uint8 pinNumber = config->nozzlePins[pinIndex];
+        uint8_t pinNumber = config->nozzlePins[pinIndex];
         pinBitMask = pinBitMask | (1ULL << pinNumber);
     }
     return pinBitMask;
 }
 
 esp_err_t jetpack_io_init(const Config* config) {
-    uint64 pinBitMask = gpio_pin_bit_mask(config);
+    uint64_t pinBitMask = gpio_pin_bit_mask(config);
     if (pinBitMask != 0) {
         gpio_config_t gpio = {
             .intr_type = GPIO_INTR_DISABLE,
@@ -34,7 +34,7 @@ esp_err_t jetpack_io_init(const Config* config) {
     }
 }
 
-void jetpack_io_fire(uint8 nozzleId) {
+void jetpack_io_fire(uint8_t nozzleId) {
     int maxId = appState.config.nozzleCount - 1;
     if (nozzleId <= maxId) {
         uint8 nozzlePin = appState.config.nozzlePins[nozzleId];

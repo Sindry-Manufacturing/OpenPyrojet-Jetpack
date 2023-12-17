@@ -6,7 +6,6 @@
 #include <esp_err.h>
 #include <esp_netif.h>
 
-#include "types.h"
 #include "wifi_config.h"
 
 void wifi_config(WifiConfig*);

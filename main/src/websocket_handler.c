@@ -67,7 +67,7 @@ static esp_err_t handle_fire_nozzle(const Message* message) {
     }
 
     long nozzleId = cJSON_GetNumberValue(message->data);
-    jetpack_io_fire((uint8) nozzleId);
+    jetpack_io_fire((uint8_t) nozzleId);
 
     return ESP_OK;
 }

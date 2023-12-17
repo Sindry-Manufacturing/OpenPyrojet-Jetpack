@@ -2,7 +2,7 @@
 
 #include <esp_log.h>
 
-#include "types.h"
+#include "alloc.h"
 
 typedef struct {
     const char* name;

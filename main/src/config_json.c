@@ -91,7 +91,7 @@ static cJSON* config_to_json_internal(const Config* config, bool removeRiskItems
     int pinInts[NOZZLE_COUNT_MAX];
     int currentIndex = 0;
     while (currentIndex < NOZZLE_COUNT_MAX) {
-        uint8 pin = config->nozzlePins[currentIndex];
+        uint8_t pin = config->nozzlePins[currentIndex];
         if (pin > 0) {
             pinInts[currentIndex] = (int) pin;
             currentIndex++;

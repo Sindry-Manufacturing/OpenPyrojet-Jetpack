@@ -3,7 +3,6 @@
 
 #include <esp_err.h>
 
-#include "types.h"
 #include "wifi_config.h"
 #include "display_config.h"
 
@@ -14,10 +13,10 @@
 typedef struct {
     WifiConfig wifi;
     DisplayConfig display;
-    uint8 nozzleCount;
-    uint8 nozzlePins[NOZZLE_COUNT_MAX];
-    uint32 heatingDuration; // duration of filament heating in µs
-    uint32 triggerDelay; // minimum delay between consecutive ejections in µs
+    uint8_t nozzleCount;
+    uint8_t nozzlePins[NOZZLE_COUNT_MAX];
+    uint32_t heatingDuration; // duration of filament heating in µs
+    uint32_t triggerDelay; // minimum delay between consecutive ejections in µs
 } Config;
 
 /**
