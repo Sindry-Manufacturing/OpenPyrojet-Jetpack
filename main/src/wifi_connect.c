@@ -38,7 +38,7 @@
 #endif
 
 static int s_active_interfaces = 0;
-static xSemaphoreHandle s_semph_get_ip_addrs;
+static SemaphoreHandle_t s_semph_get_ip_addrs;
 static esp_netif_t* s_wifi_esp_netif = NULL;
 
 #ifdef WIFI_USE_IPV6

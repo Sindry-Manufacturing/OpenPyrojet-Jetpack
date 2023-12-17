@@ -5,7 +5,8 @@
 #include "websocket_server_start.h"
 
 #include <esp_event.h>
-#include <esp_netif.h> // for IP_EVENT etc.
+#include <esp_wifi.h> // for WIFI_EVENT
+#include <esp_netif.h> // for IP_EVENT
 
 #include "websocket_server.h"
 #include "websocket_handler.h"

@@ -24,10 +24,10 @@ static EventGroupHandle_t wifi_event_group;
 const int CONNECTED_BIT = BIT0;
 
 /**
- * @return a random number in the range of [1, 13]
+ * @return a random number in the range of [1, 11]
  */
 static uint8_t random_wifi_channel() {
-    return (abs(rand()) % 13) + 1;
+    return (abs(rand()) % 11) + 1;
 }
 
 const char* wifi_ap_get_ssid() {
