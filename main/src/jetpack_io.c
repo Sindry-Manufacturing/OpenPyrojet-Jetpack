@@ -37,7 +37,7 @@ esp_err_t jetpack_io_init(const Config* config) {
 void jetpack_io_fire(uint8_t nozzleId) {
     int maxId = appState.config.nozzleCount - 1;
     if (nozzleId <= maxId) {
-        uint8 nozzlePin = appState.config.nozzlePins[nozzleId];
+        uint8_t nozzlePin = appState.config.nozzlePins[nozzleId];
         ESP_LOGI(TAG, "Firing nozzle %d at pin %d for %lu µs", nozzleId, nozzlePin, appState.config.heatingDuration);
         gpio_set_level(nozzlePin, 1);
         esp_rom_delay_us(appState.config.heatingDuration);
