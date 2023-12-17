@@ -3,6 +3,8 @@
 #include "display_page.h"
 #include "jetpack_io.h"
 
+struct AppState appState;
+
 void app_state_changed(AppStateChange which) {
     switch (which) {
         case CONFIG_PINS:

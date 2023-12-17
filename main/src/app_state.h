@@ -5,10 +5,12 @@
 
 #include <esp_netif_ip_addr.h>
 
+extern struct AppState appState;
+
 struct AppState {
     Config config;
     esp_ip4_addr_t ip;
-} appState;
+};
 
 typedef enum {
     CONFIG_PINS,

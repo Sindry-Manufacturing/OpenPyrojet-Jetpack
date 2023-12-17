@@ -1,7 +1,6 @@
 #include "websocket_server.h"
 
 #include <esp_log.h>
-#include <mdns.h>
 
 #include "config.h"
 
