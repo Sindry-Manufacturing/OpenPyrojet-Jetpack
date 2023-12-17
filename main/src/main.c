@@ -61,6 +61,8 @@ void app_main(void) {
 
     if (display_config_is_usable(&appState.config.display)) {
         display_init(&appState.config.display);
+    } else {
+        ESP_LOGW(TAG, "display config not present or usable");
     }
 
     if (wifi_config_is_usable(&appState.config.wifi)) {

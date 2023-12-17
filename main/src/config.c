@@ -4,6 +4,8 @@
 #include <string.h>
 #include <cJSON.h>
 
+#include <sys/stat.h>
+
 #include "config_json.h"
 #include "file.h"
 
@@ -12,21 +14,21 @@ static const char* userConfigPath = "/config/user.json";
 static const char* defaultConfigPath = "/config/default.json";
 
 bool config_ensure_user_copy() {
-    if (file_exists(userConfigPath)) { // file exists
-        ESP_LOGI(TAG, "using existing %s", userConfigPath);
-        return true;
-    } else {
-        return file_copy(defaultConfigPath, userConfigPath);
-    }
+  if (file_exists(userConfigPath)) { // file exists
+    ESP_LOGI(TAG, "using existing %s", userConfigPath);
+    return true;
+  } else {
+    ESP_LOGI(TAG, "creating %s from %s", userConfigPath, defaultConfigPath);
+    return file_copy(defaultConfigPath, userConfigPath);
+  }
 }
 
 esp_err_t config_init(Config* config) {
-    if (!config_ensure_user_copy()) {
+  if (!config_ensure_user_copy()) {
         ESP_LOGE(TAG, "failed to ensure existence of %s", userConfigPath);
         return ESP_FAIL;
     }
 
-    const char* userConfigPath = "/config/user.json";
     FILE* file = fopen(userConfigPath, "r");
     if (file == NULL) {
         ESP_LOGE(TAG, "failed to open file %s", userConfigPath);
