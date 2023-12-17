@@ -2,12 +2,12 @@
 
 #include <sys/stat.h>
 #include <esp_log.h>
+#include <unistd.h>
 
 static const char* TAG = "file";
 
 bool file_exists(const char* filename) {
-    struct stat buffer;
-    return (stat(filename, &buffer) == 0);
+    return access(filename, F_OK) == 0;
 }
 
 long file_get_size(FILE* file) {
@@ -20,7 +20,7 @@ long file_get_size(FILE* file) {
 long file_copy(const char* fromPath, const char* toPath) {
     FILE* sourceFile = fopen(fromPath, "r");
     if (sourceFile == NULL) {
-        ESP_LOGE(TAG, "failed to open target file %s", fromPath);
+        ESP_LOGE(TAG, "failed to open source file %s", fromPath);
         return -1;
     }
 
@@ -32,17 +32,15 @@ long file_copy(const char* fromPath, const char* toPath) {
     }
 
     // Copy all bytes from source to target
-    int character;
-    long size = 0;
-    while ((character = fgetc(sourceFile)) != EOF) {
-        fputc(character, targetFile);
-        size++;
-    }
-
-    ESP_LOGI(TAG, "copied %s into %s", fromPath, toPath);
+    char buffer[1024];
+    size_t bytes;
+    size_t totalBytes = 0;
+    while (0 < (bytes = fread(buffer, 1, sizeof(buffer), sourceFile)))
+      totalBytes += fwrite(buffer, 1, bytes, targetFile);
+    ESP_LOGI(TAG, "copied %s into %s (%u bytes)", fromPath, toPath, totalBytes);
 
     fclose(sourceFile);
     fclose(targetFile);
 
-    return size;
+    return totalBytes;
 }
